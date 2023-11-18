@@ -7,7 +7,7 @@ use rand::{
     distributions::{Distribution, Standard},
     Rng,
 };
-use strum::EnumIter;
+use strum::{EnumIter, EnumString};
 
 use self::hobbit::Hobbit;
 
@@ -21,7 +21,8 @@ where
 }
 
 /// Generate a name for one of the following Heroic Cultures
-#[derive(Debug, EnumIter)]
+#[derive(Clone, Copy, Debug, strum::Display, EnumIter, EnumString, Eq, PartialEq)]
+#[strum(serialize_all = "kebab-case")]
 pub enum Name {
     /// Names are composed of a first name and a family name. First names for men are usually
     /// simple and short, with women being often given names of flowers or precious stones, but
@@ -48,7 +49,7 @@ impl Name {
 
 #[cfg(test)]
 mod test {
-    use strum::IntoEnumIterator;
+    use strum::{IntoEnumIterator, ParseError};
 
     use crate::rand_utils;
 
@@ -61,5 +62,17 @@ mod test {
             let name = culture.gen(&mut rng);
             assert!(!name.to_string().is_empty());
         }
+    }
+
+    #[test]
+    fn can_parse_from_strings() {
+        for culture in Name::iter() {
+            assert_eq!(Ok(culture), Name::try_from(culture.to_string().as_str()));
+        }
+    }
+
+    #[test]
+    fn returns_error_for_unknown_string() {
+        assert_eq!(Err(ParseError::VariantNotFound), Name::try_from("foo"));
     }
 }
