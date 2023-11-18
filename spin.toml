@@ -1,0 +1,18 @@
+spin_manifest_version = 2
+
+[application]
+name = "loremaster"
+version = "0.1.0"
+authors = ["Ben Brandt <benjamin.brandt@aleph-alpha.com>"]
+description = "Tools to help Loremasters running The One Ring 2E"
+
+[[trigger.http]]
+route = "/..."
+component = "loremaster"
+
+[component.loremaster]
+source = "target/wasm32-wasi/release/loremaster.wasm"
+allowed_outbound_hosts = []
+[component.loremaster.build]
+command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]
