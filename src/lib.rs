@@ -14,13 +14,13 @@ mod rand_utils;
 /// A simple Spin HTTP component.
 #[http_component]
 fn handle_loremaster(req: Request) -> Response {
-    println!(
-        "Handling request to {}",
-        req.header("spin-full-url")
-            .unwrap()
-            .as_str()
-            .unwrap_or_default()
-    );
+    if let Some(header) = req.header("spin-full-url") {
+        println!(
+            "Handling request to {}",
+            header.as_str().unwrap_or_default()
+        );
+    }
+
     let router = http_router! {
         GET "/names/:culture" => api::names,
         _   "/*"             => |_req: Request, params| {
@@ -64,6 +64,7 @@ mod test {
         for culture in Name::iter() {
             let response =
                 handle_loremaster(Request::new(Method::Get, format!("/names/{culture}")));
+            dbg!(culture);
             assert_eq!(response.status(), &200u16);
         }
     }

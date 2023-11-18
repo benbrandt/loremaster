@@ -9,9 +9,10 @@ use rand::{
 };
 use strum::{EnumIter, EnumString};
 
-use self::{bardings::Barding, hobbits::HobbitOfTheShire};
+use self::{bardings::Barding, dwarves::DwarfOfDurinsFolk, hobbits::HobbitOfTheShire};
 
 mod bardings;
+mod dwarves;
 mod hobbits;
 
 /// Trait that ensures a given struct can randomly generate a name.
@@ -33,6 +34,14 @@ pub enum Name {
     /// given with their first name when introduced formally — for example, Lifstan, son of
     /// Leiknir, or Ingrith, daughter of Ingolf).
     Bardings,
+    /// All Dwarves speak the Common Tongue, but preserve a knowledge of a secret Dwarvish
+    /// language. They receive a true name at birth that they do not reveal to members of other
+    /// folks, and adopt another name in the tradition of their neighbours. This custom has been in
+    /// use for so long that a number of names have become traditionally associated with Dwarves,
+    /// and are used almost exclusively by them. Dwarves of renown are sometimes given an honorific
+    /// title, celebrating an exceptional deed or distinctive quality (for example, Thorin
+    /// Oakenshield or Dáin Ironfoot).
+    DwarvesOfDurinsFolk,
     /// Hobbits speak only the Common Speech, preserving the use of a few words and names of their
     /// own forgotten tongue. Names are composed of a first name and a family name. First names for
     /// men are usually simple and short, with women being often given names of flowers or precious
@@ -53,6 +62,7 @@ impl Name {
     pub fn gen<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
         match self {
             Name::Bardings => rng.gen::<Barding>().to_string(),
+            Name::DwarvesOfDurinsFolk => rng.gen::<DwarfOfDurinsFolk>().to_string(),
             Name::HobbitsOfTheShire => rng.gen::<HobbitOfTheShire>().to_string(),
         }
     }
