@@ -9,8 +9,9 @@ use rand::{
 };
 use strum::{EnumIter, EnumString};
 
-use self::hobbit::Hobbit;
+use self::{barding::Barding, hobbit::Hobbit};
 
+mod barding;
 mod hobbit;
 
 /// Trait that ensures a given struct can randomly generate a name.
@@ -24,10 +25,19 @@ where
 #[derive(Clone, Copy, Debug, strum::Display, EnumIter, EnumString, Eq, PartialEq)]
 #[strum(serialize_all = "kebab-case")]
 pub enum Name {
-    /// Names are composed of a first name and a family name. First names for men are usually
-    /// simple and short, with women being often given names of flowers or precious stones, but
-    /// among the older families a custom survives of giving more heroic and high-sounding names,
-    /// whose origin can be traced back to a time before the Shire.
+    /// All Bardings speak Dalish, a language that can be described as a very old form of the
+    /// Common Speech. As far as their names are concerned, they are usually composed of one or two
+    /// elements (for example, Dag — Day, or Lif-stan — Life Stone). Like most Northmen, Bardings
+    /// often name their children after a renowned ancestor or relative, or choose a name beginning
+    /// with the same sound or sharing one element with that of the father (whose name is often
+    /// given with their first name when introduced formally — for example, Lifstan, son of
+    /// Leiknir, or Ingrith, daughter of Ingolf).
+    Barding,
+    /// Hobbits speak only the Common Speech, preserving the use of a few words and names of their
+    /// own forgotten tongue. Names are composed of a first name and a family name. First names for
+    /// men are usually simple and short, with women being often given names of flowers or precious
+    /// stones, but among the older families a custom survives of giving more heroic and
+    /// high-sounding names, whose origin can be traced back to a time before the Shire.
     Hobbit,
 }
 
@@ -42,6 +52,7 @@ impl Name {
     /// ```
     pub fn gen<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
         match self {
+            Name::Barding => rng.gen::<Barding>().to_string(),
             Name::Hobbit => rng.gen::<Hobbit>().to_string(),
         }
     }

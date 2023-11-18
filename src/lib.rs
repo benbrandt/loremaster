@@ -47,12 +47,18 @@ mod api {
 #[cfg(test)]
 mod test {
     use spin_sdk::http::Method;
+    use strum::IntoEnumIterator;
+
+    use crate::names::Name;
 
     use super::*;
 
     #[test]
     fn returns_a_name() {
-        let response = handle_loremaster(Request::new(Method::Get, "/names/hobbit"));
-        assert_eq!(response.status(), &200u16);
+        for culture in Name::iter() {
+            let response =
+                handle_loremaster(Request::new(Method::Get, format!("/names/{culture}")));
+            assert_eq!(response.status(), &200u16);
+        }
     }
 }
