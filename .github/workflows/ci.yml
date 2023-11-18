@@ -69,6 +69,11 @@ jobs:
     concurrency: deployment
     steps:
       - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          targets: wasm32-wasi
+      - uses: Swatinem/rust-cache@v2
       - uses: fermyon/actions/spin/setup@v1
       - uses: fermyon/actions/spin/deploy@v1
         with:
