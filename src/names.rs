@@ -13,7 +13,7 @@ use self::{
     dwarves::DwarfOfDurinsFolk,
     elves::ElfOfLindon,
     hobbits::HobbitOfTheShire,
-    men::{Barding, ManOfBree},
+    men::{Barding, ManOfBree, RangerOfTheNorth},
 };
 
 mod dwarves;
@@ -61,6 +61,10 @@ pub enum Name {
     /// albeit slightly altered in a local dialect. They use names that to foreign ears sound
     /// similar to those used by Hobbits in the Shire (Hobbits beg to differ, of course).
     MenOfBree,
+    /// The native language of the Dúnedain is the Westron, or Common Speech. Some still learn the
+    /// Sindarin Elven-tongue, as it is handed down from generation to generation. They retain an
+    /// ancient tradition of naming their children using that fair speech.
+    RangersOfTheNorth,
 }
 
 impl Name {
@@ -79,6 +83,7 @@ impl Name {
             Name::ElvesOfLindon => rng.gen::<ElfOfLindon>().to_string(),
             Name::HobbitsOfTheShire => rng.gen::<HobbitOfTheShire>().to_string(),
             Name::MenOfBree => rng.gen::<ManOfBree>().to_string(),
+            Name::RangersOfTheNorth => rng.gen::<RangerOfTheNorth>().to_string(),
         }
     }
 }
