@@ -9,10 +9,13 @@ use rand::{
 };
 use strum::{EnumIter, EnumString};
 
-use self::{bardings::Barding, dwarves::DwarfOfDurinsFolk, hobbits::HobbitOfTheShire};
+use self::{
+    bardings::Barding, dwarves::DwarfOfDurinsFolk, elves::ElfOfLindon, hobbits::HobbitOfTheShire,
+};
 
 mod bardings;
 mod dwarves;
+mod elves;
 mod hobbits;
 
 /// Trait that ensures a given struct can randomly generate a name.
@@ -42,6 +45,9 @@ pub enum Name {
     /// title, celebrating an exceptional deed or distinctive quality (for example, Thorin
     /// Oakenshield or Dáin Ironfoot).
     DwarvesOfDurinsFolk,
+    /// In addition to the Common Speech, all Elves speak their own, fair tongue — the Sindarin
+    /// speech. For the most part, the Elves of Lindon bear names fashioned in that language.
+    ElvesOfLindon,
     /// Hobbits speak only the Common Speech, preserving the use of a few words and names of their
     /// own forgotten tongue. Names are composed of a first name and a family name. First names for
     /// men are usually simple and short, with women being often given names of flowers or precious
@@ -63,6 +69,7 @@ impl Name {
         match self {
             Name::Bardings => rng.gen::<Barding>().to_string(),
             Name::DwarvesOfDurinsFolk => rng.gen::<DwarfOfDurinsFolk>().to_string(),
+            Name::ElvesOfLindon => rng.gen::<ElfOfLindon>().to_string(),
             Name::HobbitsOfTheShire => rng.gen::<HobbitOfTheShire>().to_string(),
         }
     }

@@ -64,7 +64,6 @@ mod test {
         for culture in Name::iter() {
             let response =
                 handle_loremaster(Request::new(Method::Get, format!("/names/{culture}")));
-            dbg!(culture);
             assert_eq!(response.status(), &200u16);
         }
     }
