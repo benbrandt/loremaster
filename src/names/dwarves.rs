@@ -57,8 +57,10 @@ mod test {
 
     #[test]
     fn name_can_be_displayed() {
-        let name = DwarfOfDurinsFolk { name: "First" };
-        assert_eq!(format!("{name}"), "First");
+        let mut rng = rand_utils::rng_from_entropy();
+        let name = rng.gen::<DwarfOfDurinsFolk>();
+
+        assert_eq!(format!("{name}"), format!("{}", name.name));
     }
 
     #[test]

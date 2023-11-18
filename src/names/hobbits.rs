@@ -148,11 +148,13 @@ mod test {
 
     #[test]
     fn name_can_be_displayed() {
-        let name = HobbitOfTheShire {
-            first_name: "First",
-            family_name: "Family",
-        };
-        assert_eq!(format!("{name}"), "First Family");
+        let mut rng = rand_utils::rng_from_entropy();
+        let name = rng.gen::<HobbitOfTheShire>();
+
+        assert_eq!(
+            format!("{name}"),
+            format!("{} {}", name.first_name, name.family_name)
+        );
     }
 
     #[test]

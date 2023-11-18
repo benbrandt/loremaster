@@ -100,8 +100,10 @@ mod test {
 
     #[test]
     fn name_can_be_displayed() {
-        let name = RangerOfTheNorth { name: "First" };
-        assert_eq!(format!("{name}"), "First");
+        let mut rng = rand_utils::rng_from_entropy();
+        let name = rng.gen::<RangerOfTheNorth>();
+
+        assert_eq!(format!("{name}"), format!("{}", name.name));
     }
 
     #[test]
