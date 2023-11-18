@@ -9,10 +9,10 @@ use rand::{
 };
 use strum::{EnumIter, EnumString};
 
-use self::{barding::Barding, hobbit::Hobbit};
+use self::{bardings::Barding, hobbits::HobbitOfTheShire};
 
-mod barding;
-mod hobbit;
+mod bardings;
+mod hobbits;
 
 /// Trait that ensures a given struct can randomly generate a name.
 pub trait NameGenerator: fmt::Display + Sized
@@ -32,13 +32,13 @@ pub enum Name {
     /// with the same sound or sharing one element with that of the father (whose name is often
     /// given with their first name when introduced formally — for example, Lifstan, son of
     /// Leiknir, or Ingrith, daughter of Ingolf).
-    Barding,
+    Bardings,
     /// Hobbits speak only the Common Speech, preserving the use of a few words and names of their
     /// own forgotten tongue. Names are composed of a first name and a family name. First names for
     /// men are usually simple and short, with women being often given names of flowers or precious
     /// stones, but among the older families a custom survives of giving more heroic and
     /// high-sounding names, whose origin can be traced back to a time before the Shire.
-    Hobbit,
+    HobbitsOfTheShire,
 }
 
 impl Name {
@@ -52,8 +52,8 @@ impl Name {
     /// ```
     pub fn gen<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
         match self {
-            Name::Barding => rng.gen::<Barding>().to_string(),
-            Name::Hobbit => rng.gen::<Hobbit>().to_string(),
+            Name::Bardings => rng.gen::<Barding>().to_string(),
+            Name::HobbitsOfTheShire => rng.gen::<HobbitOfTheShire>().to_string(),
         }
     }
 }
