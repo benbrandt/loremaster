@@ -6,7 +6,7 @@ use rand::{
     Rng,
 };
 
-use super::NameGenerator;
+use crate::names::NameGenerator;
 
 #[derive(Debug)]
 pub struct Barding {

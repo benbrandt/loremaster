@@ -10,13 +10,16 @@ use rand::{
 use strum::{EnumIter, EnumString};
 
 use self::{
-    bardings::Barding, dwarves::DwarfOfDurinsFolk, elves::ElfOfLindon, hobbits::HobbitOfTheShire,
+    dwarves::DwarfOfDurinsFolk,
+    elves::ElfOfLindon,
+    hobbits::HobbitOfTheShire,
+    men::{Barding, ManOfBree},
 };
 
-mod bardings;
 mod dwarves;
 mod elves;
 mod hobbits;
+mod men;
 
 /// Trait that ensures a given struct can randomly generate a name.
 pub trait NameGenerator: fmt::Display + Sized
@@ -54,6 +57,10 @@ pub enum Name {
     /// stones, but among the older families a custom survives of giving more heroic and
     /// high-sounding names, whose origin can be traced back to a time before the Shire.
     HobbitsOfTheShire,
+    /// The Men of Bree have forgotten their ancient, native speech, and speak the Common Tongue,
+    /// albeit slightly altered in a local dialect. They use names that to foreign ears sound
+    /// similar to those used by Hobbits in the Shire (Hobbits beg to differ, of course).
+    MenOfBree,
 }
 
 impl Name {
@@ -71,6 +78,7 @@ impl Name {
             Name::DwarvesOfDurinsFolk => rng.gen::<DwarfOfDurinsFolk>().to_string(),
             Name::ElvesOfLindon => rng.gen::<ElfOfLindon>().to_string(),
             Name::HobbitsOfTheShire => rng.gen::<HobbitOfTheShire>().to_string(),
+            Name::MenOfBree => rng.gen::<ManOfBree>().to_string(),
         }
     }
 }
