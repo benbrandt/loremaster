@@ -6,7 +6,7 @@ use rand::{
     Rng,
 };
 
-use super::NameGenerator;
+use super::Name;
 
 #[derive(Debug)]
 #[allow(clippy::module_name_repetitions)]
@@ -74,7 +74,7 @@ impl Distribution<ManOfBreeName> for Standard {
     }
 }
 
-impl NameGenerator for ManOfBreeName {}
+impl Name for ManOfBreeName {}
 
 #[cfg(test)]
 mod test {

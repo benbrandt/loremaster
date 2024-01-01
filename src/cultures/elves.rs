@@ -6,7 +6,7 @@ use rand::{
     Rng,
 };
 
-use super::NameGenerator;
+use super::Name;
 
 #[derive(Debug)]
 pub struct ElfOfLindonName {
@@ -88,7 +88,7 @@ impl Distribution<ElfOfLindonName> for Standard {
     }
 }
 
-impl NameGenerator for ElfOfLindonName {}
+impl Name for ElfOfLindonName {}
 
 #[cfg(test)]
 mod test {

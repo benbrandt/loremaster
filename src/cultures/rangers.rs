@@ -6,7 +6,7 @@ use rand::{
     Rng,
 };
 
-use super::NameGenerator;
+use super::Name;
 
 #[derive(Debug)]
 pub struct RangerOfTheNorthName {
@@ -88,7 +88,7 @@ impl Distribution<RangerOfTheNorthName> for Standard {
     }
 }
 
-impl NameGenerator for RangerOfTheNorthName {}
+impl Name for RangerOfTheNorthName {}
 
 #[cfg(test)]
 mod test {

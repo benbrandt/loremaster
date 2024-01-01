@@ -254,6 +254,8 @@ dependencies = [
  "itertools",
  "rand",
  "rand_pcg",
+ "serde",
+ "serde_json",
  "spin-sdk",
  "strum",
 ]

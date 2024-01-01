@@ -6,7 +6,7 @@ use rand::{
     Rng,
 };
 
-use super::NameGenerator;
+use super::Name;
 
 #[derive(Debug)]
 pub struct DwarfOfDurinsFolkName {
@@ -45,7 +45,7 @@ impl Distribution<DwarfOfDurinsFolkName> for Standard {
     }
 }
 
-impl NameGenerator for DwarfOfDurinsFolkName {}
+impl Name for DwarfOfDurinsFolkName {}
 
 #[cfg(test)]
 mod test {

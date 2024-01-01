@@ -5,9 +5,11 @@ use core::fmt;
 
 use rand::{
     distributions::{Distribution, Standard},
+    seq::IteratorRandom,
     Rng,
 };
-use strum::{EnumIter, EnumString};
+use serde::Serialize;
+use strum::{EnumIter, EnumString, IntoEnumIterator};
 
 use self::{
     bardings::BardingName, bree::ManOfBreeName, dwarves::DwarfOfDurinsFolkName,
@@ -22,16 +24,17 @@ mod hobbits;
 mod rangers;
 
 /// Trait that ensures a given struct can randomly generate a name.
-pub trait NameGenerator: fmt::Display + Sized
+pub trait Name: fmt::Display + Sized
 where
     Standard: Distribution<Self>,
 {
 }
 
 /// Generate a name for one of the following Heroic Cultures
-#[derive(Clone, Copy, Debug, strum::Display, EnumIter, EnumString, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, strum::Display, EnumIter, EnumString, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
 #[strum(serialize_all = "kebab-case")]
-pub enum Culture {
+pub enum HeroicCulture {
     /// All Bardings speak Dalish, a language that can be described as a very old form of the
     /// Common Speech. As far as their names are concerned, they are usually composed of one or two
     /// elements (for example, Dag — Day, or Lif-stan — Life Stone). Like most Northmen, Bardings
@@ -67,7 +70,7 @@ pub enum Culture {
     RangersOfTheNorth,
 }
 
-impl Culture {
+impl HeroicCulture {
     /// Generate a new name for the given race
     ///
     /// ```
@@ -78,13 +81,19 @@ impl Culture {
     /// ```
     pub fn gen_name<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
         match self {
-            Culture::Bardings => rng.gen::<BardingName>().to_string(),
-            Culture::DwarvesOfDurinsFolk => rng.gen::<DwarfOfDurinsFolkName>().to_string(),
-            Culture::ElvesOfLindon => rng.gen::<ElfOfLindonName>().to_string(),
-            Culture::HobbitsOfTheShire => rng.gen::<HobbitOfTheShireName>().to_string(),
-            Culture::MenOfBree => rng.gen::<ManOfBreeName>().to_string(),
-            Culture::RangersOfTheNorth => rng.gen::<RangerOfTheNorthName>().to_string(),
+            HeroicCulture::Bardings => rng.gen::<BardingName>().to_string(),
+            HeroicCulture::DwarvesOfDurinsFolk => rng.gen::<DwarfOfDurinsFolkName>().to_string(),
+            HeroicCulture::ElvesOfLindon => rng.gen::<ElfOfLindonName>().to_string(),
+            HeroicCulture::HobbitsOfTheShire => rng.gen::<HobbitOfTheShireName>().to_string(),
+            HeroicCulture::MenOfBree => rng.gen::<ManOfBreeName>().to_string(),
+            HeroicCulture::RangersOfTheNorth => rng.gen::<RangerOfTheNorthName>().to_string(),
         }
+    }
+}
+
+impl Distribution<HeroicCulture> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> HeroicCulture {
+        HeroicCulture::iter().choose(rng).unwrap()
     }
 }
 
@@ -99,7 +108,7 @@ mod test {
     #[test]
     fn no_generated_names_are_empty() {
         let mut rng = rand_utils::rng_from_entropy();
-        for culture in Culture::iter() {
+        for culture in HeroicCulture::iter() {
             let name = culture.gen_name(&mut rng);
             assert!(!name.to_string().is_empty());
         }
@@ -107,13 +116,19 @@ mod test {
 
     #[test]
     fn can_parse_from_strings() {
-        for culture in Culture::iter() {
-            assert_eq!(Ok(culture), Culture::try_from(culture.to_string().as_str()));
+        for culture in HeroicCulture::iter() {
+            assert_eq!(
+                Ok(culture),
+                HeroicCulture::try_from(culture.to_string().as_str())
+            );
         }
     }
 
     #[test]
     fn returns_error_for_unknown_string() {
-        assert_eq!(Err(ParseError::VariantNotFound), Culture::try_from("foo"));
+        assert_eq!(
+            Err(ParseError::VariantNotFound),
+            HeroicCulture::try_from("foo")
+        );
     }
 }

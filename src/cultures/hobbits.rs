@@ -6,7 +6,7 @@ use rand::{
     Rng,
 };
 
-use super::NameGenerator;
+use super::Name;
 
 #[derive(Debug)]
 pub struct HobbitOfTheShireName {
@@ -136,7 +136,7 @@ impl Distribution<HobbitOfTheShireName> for Standard {
     }
 }
 
-impl NameGenerator for HobbitOfTheShireName {}
+impl Name for HobbitOfTheShireName {}
 
 #[cfg(test)]
 mod test {
