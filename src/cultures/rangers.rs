@@ -6,14 +6,14 @@ use rand::{
     Rng,
 };
 
-use crate::names::NameGenerator;
+use super::NameGenerator;
 
 #[derive(Debug)]
-pub struct RangerOfTheNorth {
+pub struct RangerOfTheNorthName {
     name: &'static str,
 }
 
-impl fmt::Display for RangerOfTheNorth {
+impl fmt::Display for RangerOfTheNorthName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.name)
     }
@@ -76,9 +76,9 @@ const FEMALE_NAMES: &[&str] = &[
     "Tarandîs",
 ];
 
-impl Distribution<RangerOfTheNorth> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> RangerOfTheNorth {
-        RangerOfTheNorth {
+impl Distribution<RangerOfTheNorthName> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> RangerOfTheNorthName {
+        RangerOfTheNorthName {
             name: [MALE_NAMES, FEMALE_NAMES]
                 .choose(rng)
                 .unwrap()
@@ -88,7 +88,7 @@ impl Distribution<RangerOfTheNorth> for Standard {
     }
 }
 
-impl NameGenerator for RangerOfTheNorth {}
+impl NameGenerator for RangerOfTheNorthName {}
 
 #[cfg(test)]
 mod test {
@@ -101,7 +101,7 @@ mod test {
     #[test]
     fn name_can_be_displayed() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<RangerOfTheNorth>();
+        let name = rng.gen::<RangerOfTheNorthName>();
 
         assert_eq!(format!("{name}"), format!("{}", name.name));
     }
@@ -109,7 +109,7 @@ mod test {
     #[test]
     fn name_can_be_randomly_generated() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<RangerOfTheNorth>();
+        let name = rng.gen::<RangerOfTheNorthName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES].concat().contains(&name.name));
     }

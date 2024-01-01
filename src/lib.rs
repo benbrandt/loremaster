@@ -8,7 +8,7 @@ A collection of tools to help a Loremaster running a campaign with The One Ring 
 use spin_sdk::http::{Request, Response};
 use spin_sdk::{http_component, http_router};
 
-pub mod names;
+pub mod cultures;
 mod rand_utils;
 
 /// A simple Spin HTTP component.
@@ -22,7 +22,7 @@ fn handle_loremaster(req: Request) -> Response {
     }
 
     let router = http_router! {
-        GET "/names/:culture" => api::names,
+        POST "/cultures/:culture/names" => api::names,
         _   "/*"             => |_req: Request, params| {
             let capture = params.wildcard().unwrap_or_default();
             Response::new(200, capture.to_string())
@@ -34,13 +34,13 @@ fn handle_loremaster(req: Request) -> Response {
 mod api {
     use spin_sdk::http::{Params, Request, Response};
 
-    use crate::{names::Name, rand_utils};
+    use crate::{cultures::Culture, rand_utils};
 
-    // /names/:culture
+    // /cultures/:culture/names
     pub fn names(_req: Request, params: Params) -> anyhow::Result<Response> {
-        let culture = Name::try_from(params.get("culture").expect("CULTURE"))?;
+        let culture = Culture::try_from(params.get("culture").expect("CULTURE"))?;
         let mut rng = rand_utils::rng_from_entropy();
-        let name = culture.gen(&mut rng).to_string();
+        let name = culture.gen_name(&mut rng).to_string();
 
         Ok(Response::builder()
             .status(200)
@@ -55,15 +55,17 @@ mod test {
     use spin_sdk::http::Method;
     use strum::IntoEnumIterator;
 
-    use crate::names::Name;
+    use crate::cultures::Culture;
 
     use super::*;
 
     #[test]
     fn returns_a_name() {
-        for culture in Name::iter() {
-            let response =
-                handle_loremaster(Request::new(Method::Get, format!("/names/{culture}")));
+        for culture in Culture::iter() {
+            let response = handle_loremaster(Request::new(
+                Method::Post,
+                format!("/cultures/{culture}/names"),
+            ));
             assert_eq!(response.status(), &200u16);
         }
     }

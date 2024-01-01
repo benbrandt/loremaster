@@ -6,16 +6,16 @@ use rand::{
     Rng,
 };
 
-use crate::names::NameGenerator;
+use super::NameGenerator;
 
 #[derive(Debug)]
 #[allow(clippy::module_name_repetitions)]
-pub struct ManOfBree {
+pub struct ManOfBreeName {
     first_name: &'static str,
     family_name: &'static str,
 }
 
-impl fmt::Display for ManOfBree {
+impl fmt::Display for ManOfBreeName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{} {}", self.first_name, self.family_name)
     }
@@ -61,9 +61,9 @@ const FAMILY_NAMES: &[&str] = &[
     "Wayward",
 ];
 
-impl Distribution<ManOfBree> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ManOfBree {
-        ManOfBree {
+impl Distribution<ManOfBreeName> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ManOfBreeName {
+        ManOfBreeName {
             first_name: [MALE_NAMES, FEMALE_NAMES]
                 .choose(rng)
                 .unwrap()
@@ -74,7 +74,7 @@ impl Distribution<ManOfBree> for Standard {
     }
 }
 
-impl NameGenerator for ManOfBree {}
+impl NameGenerator for ManOfBreeName {}
 
 #[cfg(test)]
 mod test {
@@ -87,7 +87,7 @@ mod test {
     #[test]
     fn name_can_be_displayed() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<ManOfBree>();
+        let name = rng.gen::<ManOfBreeName>();
 
         assert_eq!(
             format!("{name}"),
@@ -98,7 +98,7 @@ mod test {
     #[test]
     fn name_can_be_randomly_generated() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<ManOfBree>();
+        let name = rng.gen::<ManOfBreeName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES]
             .concat()

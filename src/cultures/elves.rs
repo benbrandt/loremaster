@@ -9,11 +9,11 @@ use rand::{
 use super::NameGenerator;
 
 #[derive(Debug)]
-pub struct ElfOfLindon {
+pub struct ElfOfLindonName {
     name: &'static str,
 }
 
-impl fmt::Display for ElfOfLindon {
+impl fmt::Display for ElfOfLindonName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.name)
     }
@@ -76,9 +76,9 @@ const FEMALE_NAMES: &[&str] = &[
     "Tarandîs",
 ];
 
-impl Distribution<ElfOfLindon> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ElfOfLindon {
-        ElfOfLindon {
+impl Distribution<ElfOfLindonName> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ElfOfLindonName {
+        ElfOfLindonName {
             name: [MALE_NAMES, FEMALE_NAMES]
                 .choose(rng)
                 .unwrap()
@@ -88,7 +88,7 @@ impl Distribution<ElfOfLindon> for Standard {
     }
 }
 
-impl NameGenerator for ElfOfLindon {}
+impl NameGenerator for ElfOfLindonName {}
 
 #[cfg(test)]
 mod test {
@@ -101,7 +101,7 @@ mod test {
     #[test]
     fn name_can_be_displayed() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<ElfOfLindon>();
+        let name = rng.gen::<ElfOfLindonName>();
 
         assert_eq!(format!("{name}"), format!("{}", name.name));
     }
@@ -109,7 +109,7 @@ mod test {
     #[test]
     fn name_can_be_randomly_generated() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<ElfOfLindon>();
+        let name = rng.gen::<ElfOfLindonName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES].concat().contains(&name.name));
     }

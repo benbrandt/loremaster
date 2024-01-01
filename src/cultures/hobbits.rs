@@ -9,12 +9,12 @@ use rand::{
 use super::NameGenerator;
 
 #[derive(Debug)]
-pub struct HobbitOfTheShire {
+pub struct HobbitOfTheShireName {
     first_name: &'static str,
     family_name: &'static str,
 }
 
-impl fmt::Display for HobbitOfTheShire {
+impl fmt::Display for HobbitOfTheShireName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{} {}", self.first_name, self.family_name)
     }
@@ -123,9 +123,9 @@ const FAMILY_NAMES: &[&str] = &[
     "Whitfoot",
 ];
 
-impl Distribution<HobbitOfTheShire> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> HobbitOfTheShire {
-        HobbitOfTheShire {
+impl Distribution<HobbitOfTheShireName> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> HobbitOfTheShireName {
+        HobbitOfTheShireName {
             first_name: [MALE_NAMES, FEMALE_NAMES]
                 .choose(rng)
                 .unwrap()
@@ -136,7 +136,7 @@ impl Distribution<HobbitOfTheShire> for Standard {
     }
 }
 
-impl NameGenerator for HobbitOfTheShire {}
+impl NameGenerator for HobbitOfTheShireName {}
 
 #[cfg(test)]
 mod test {
@@ -149,7 +149,7 @@ mod test {
     #[test]
     fn name_can_be_displayed() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<HobbitOfTheShire>();
+        let name = rng.gen::<HobbitOfTheShireName>();
 
         assert_eq!(
             format!("{name}"),
@@ -160,7 +160,7 @@ mod test {
     #[test]
     fn name_can_be_randomly_generated() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<HobbitOfTheShire>();
+        let name = rng.gen::<HobbitOfTheShireName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES]
             .concat()
