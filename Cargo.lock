@@ -458,9 +458,9 @@ dependencies = [
 
 [[package]]
 name = "spin-macro"
-version = "2.1.0"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8e47301958517cecc6fa5a8a50ac6aaa66b27aeb779e860d205ef796ea8c1f0"
+checksum = "13524474ab9f876586e29f954377a66ed14fcb646fc9893e6f0e762213ddbd86"
 dependencies = [
  "anyhow",
  "bytes",
@@ -472,9 +472,9 @@ dependencies = [
 
 [[package]]
 name = "spin-sdk"
-version = "2.1.0"
+version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c1f733ca161ef15493c22a83c413b7a00e36ba9d1b04841855f6f111ba8d38ef"
+checksum = "f05d0c09c0935fbb586d0a76e0f14b26b23f421c5e11b81d7200d22c4ead1211"
 dependencies = [
  "anyhow",
  "async-trait",
