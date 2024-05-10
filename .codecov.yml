@@ -5,6 +5,10 @@ coverage:
       default:
         # Avoid false negatives
         threshold: 1%
+    patch:
+      default:
+        # Avoid false negatives
+        threshold: 1%
 # Make comments less noisy
 comment:
   require_changes: true
