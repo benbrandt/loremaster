@@ -20,11 +20,11 @@ pub struct Character {
 }
 
 impl Character {
-    /// Generate a new character based on a given heroic culture
-    pub fn new<R: Rng + ?Sized>(rng: &mut R, heroic_culture: HeroicCulture) -> Self {
+    #[must_use]
+    pub fn new(heroic_culture: HeroicCulture, name: String) -> Self {
         Self {
             heroic_culture,
-            name: heroic_culture.gen_name(rng),
+            name,
         }
     }
 }
@@ -32,7 +32,7 @@ impl Character {
 impl Distribution<Character> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Character {
         let heroic_culture = rng.r#gen::<HeroicCulture>();
-        Character::new(rng, heroic_culture)
+        Character::new(heroic_culture, heroic_culture.gen_name(rng))
     }
 }
 
