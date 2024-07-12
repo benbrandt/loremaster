@@ -75,9 +75,9 @@ impl HeroicCulture {
     ///
     /// ```
     /// use rand::Rng;
-    /// use loremaster::names::Name;
+    /// use cultures::HeroicCulture;
     ///
-    /// let name = Name::Hobbit.gen(&mut rand::thread_rng());
+    /// let name = HeroicCulture::HobbitsOfTheShire.gen_name(&mut rand::thread_rng());
     /// ```
     pub fn gen_name<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
         match self {
@@ -100,8 +100,6 @@ impl Distribution<HeroicCulture> for Standard {
 #[cfg(test)]
 mod test {
     use strum::{IntoEnumIterator, ParseError};
-
-    use crate::rand_utils;
 
     use super::*;
 

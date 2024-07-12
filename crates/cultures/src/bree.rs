@@ -80,8 +80,6 @@ impl Name for ManOfBreeName {}
 mod test {
     use rand::Rng;
 
-    use crate::rand_utils;
-
     use super::*;
 
     #[test]

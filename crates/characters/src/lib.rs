@@ -4,13 +4,12 @@
 Contains the information necessary to fill out a character sheet.
 */
 
+use cultures::HeroicCulture;
 use rand::{
     distributions::{Distribution, Standard},
     Rng,
 };
 use serde::Serialize;
-
-use crate::cultures::HeroicCulture;
 
 /// Contains the information necessary to fill out a character sheet.
 #[derive(Debug, Serialize)]
@@ -38,8 +37,6 @@ impl Distribution<Character> for Standard {
 
 #[cfg(test)]
 mod test {
-    use crate::rand_utils;
-
     use super::*;
 
     #[test]

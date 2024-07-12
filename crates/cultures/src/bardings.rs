@@ -52,8 +52,6 @@ impl Name for BardingName {}
 mod test {
     use rand::Rng;
 
-    use crate::rand_utils;
-
     use super::*;
 
     #[test]

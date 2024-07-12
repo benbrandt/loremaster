@@ -14,6 +14,7 @@ use rand_pcg::Pcg64;
 /// let mut rng = rand_utils::rng_from_entropy();
 /// let x: u32 = rng.gen();
 /// ```
+#[must_use]
 pub fn rng_from_entropy() -> impl Rng {
     Pcg64::from_entropy()
 }

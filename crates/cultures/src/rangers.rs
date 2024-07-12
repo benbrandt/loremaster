@@ -9,11 +9,11 @@ use rand::{
 use super::Name;
 
 #[derive(Debug)]
-pub struct ElfOfLindonName {
+pub struct RangerOfTheNorthName {
     name: &'static str,
 }
 
-impl fmt::Display for ElfOfLindonName {
+impl fmt::Display for RangerOfTheNorthName {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.name)
     }
@@ -21,64 +21,64 @@ impl fmt::Display for ElfOfLindonName {
 
 const MALE_NAMES: &[&str] = &[
     // Core Rules
-    "Amras",
-    "Aredhel",
-    "Beleganor",
-    "Belegon",
-    "Calanhir",
-    "Carmagor",
-    "Dagorhir",
-    "Durandir",
-    "Edrahil",
-    "Ellahir",
-    "Fincalan",
-    "Fuindor",
-    "Galdagor",
-    "Galdor",
+    "Adrahil",
+    "Amlaith",
+    "Arvegil",
+    "Baranor",
+    "Belecthor",
+    "Bergil",
+    "Celepharn",
+    "Cirion",
+    "Damrod",
+    "Dírhael",
+    "Duinhir",
+    "Egalmoth",
+    "Eradan",
+    "Findemir",
+    "Forlong",
+    "Golasdan",
     "Hallas",
-    "Hirimlad",
-    "Ithildir",
-    "Lascalan",
-    "Linaith",
-    "Mablin",
-    "Malanor",
-    "Nauros",
-    "Orgalad",
-    "Pelegorn",
-    "Sargon",
+    "Hirluin",
+    "Ingold",
+    "Iorlas",
+    "Malvegil",
+    "Ohtar",
+    "Orodreth",
+    "Tarannon",
+    "Targon",
 ];
 const FEMALE_NAMES: &[&str] = &[
     // Core Rules
-    "Anórel",
-    "Aranel",
+    "Anwen",
     "Arbereth",
+    "Berúthiel",
     "Baraniel",
     "Calanril",
-    "Celebrindal",
     "Celenneth",
-    "Elanor",
-    "Elwing",
+    "Elnîth",
     "Eraniel",
-    "Fimbrethil",
+    "Finduilas",
+    "Gilraen",
+    "Gilraeth",
     "Gloredhel",
     "Idril",
-    "Irilde",
-    "Laurelin",
+    "Ioreth",
+    "Ivorwen",
     "Lôrwend",
     "Lothíriel",
+    "Luindîs",
     "Meneloth",
     "Moriel",
+    "Morwen",
     "Narieth",
     "Narniel",
-    "Nimloth",
-    "Nimrodel",
-    "Níniel",
+    "Orothêl",
     "Tarandîs",
 ];
 
-impl Distribution<ElfOfLindonName> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ElfOfLindonName {
-        ElfOfLindonName {
+impl Distribution<RangerOfTheNorthName> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> RangerOfTheNorthName {
+        RangerOfTheNorthName {
             name: [MALE_NAMES, FEMALE_NAMES]
                 .choose(rng)
                 .unwrap()
@@ -88,20 +88,18 @@ impl Distribution<ElfOfLindonName> for Standard {
     }
 }
 
-impl Name for ElfOfLindonName {}
+impl Name for RangerOfTheNorthName {}
 
 #[cfg(test)]
 mod test {
     use rand::Rng;
-
-    use crate::rand_utils;
 
     use super::*;
 
     #[test]
     fn name_can_be_displayed() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.r#gen::<ElfOfLindonName>();
+        let name = rng.r#gen::<RangerOfTheNorthName>();
 
         assert_eq!(format!("{name}"), format!("{}", name.name));
     }
@@ -109,7 +107,7 @@ mod test {
     #[test]
     fn name_can_be_randomly_generated() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.r#gen::<ElfOfLindonName>();
+        let name = rng.r#gen::<RangerOfTheNorthName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES].concat().contains(&name.name));
     }

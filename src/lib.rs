@@ -8,10 +8,6 @@ A collection of tools to help a Loremaster running a campaign with The One Ring 
 use spin_sdk::http::{Request, Response};
 use spin_sdk::{http_component, http_router};
 
-pub mod character;
-pub mod cultures;
-mod rand_utils;
-
 /// A simple Spin HTTP component.
 #[http_component]
 fn handle_loremaster(req: Request) -> Response {
@@ -34,10 +30,10 @@ fn handle_loremaster(req: Request) -> Response {
 }
 
 mod api {
+    use characters::Character;
+    use cultures::HeroicCulture;
     use rand::Rng;
     use spin_sdk::http::{conversions::TryIntoBody, Json, Params, Request, Response};
-
-    use crate::{character::Character, cultures::HeroicCulture, rand_utils};
 
     // POST /characters
     pub fn characters(_req: Request, _params: Params) -> anyhow::Result<Response> {
@@ -67,11 +63,10 @@ mod api {
 
 #[cfg(test)]
 mod test {
+    use cultures::HeroicCulture;
     use serde_json::Value;
     use spin_sdk::http::Method;
     use strum::IntoEnumIterator;
-
-    use crate::cultures::HeroicCulture;
 
     use super::*;
 

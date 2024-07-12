@@ -1,31 +1,6 @@
-[package]
-name = "loremaster"
-description = "Tools to help Loremasters running The One Ring 2E"
-authors.workspace = true
-categories.workspace = true
-edition.workspace = true
-keywords.workspace = true
-license.workspace = true
-version.workspace = true
-
-[lib]
-crate-type = ["cdylib"]
-
-[dependencies]
-anyhow = "1.0.86"
-itertools = "0.13.0"
-rand = "0.8.5"
-rand_pcg = "0.3.1"
-serde = { version = "1.0.204", features = ["derive"] }
-serde_json = "1.0.120"
-spin-sdk = "3.0.1"
-strum = { version = "0.26.3", features = ["derive"] }
-
-[lints]
-workspace = true
-
 [workspace]
 resolver = "2"
+members = ["crates/*"]
 
 [workspace.package]
 authors = ["Ben Brandt <benjamin.j.brandt@gmail.com>"]
@@ -34,6 +9,18 @@ edition = "2021"
 keywords = ["tor", "rpg", "random", "generators"]
 license = "MIT"
 version = "0.1.0"
+
+[workspace.dependencies]
+anyhow = "1.0.86"
+characters = { path = "./crates/characters" }
+cultures = { path = "./crates/cultures" }
+rand = "0.8.5"
+rand_pcg = "0.3.1"
+rand-utils = { path = "./crates/rand-utils" }
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
+spin-sdk = "3.0.1"
+strum = { version = "0.26.3", features = ["derive"] }
 
 [workspace.lints.rust]
 future-incompatible = "warn"
@@ -48,6 +35,34 @@ unused = "warn"
 [workspace.lints.clippy]
 pedantic = { level = "warn", priority = -1 }
 module-name-repetitions = "allow"
+
+[package]
+name = "loremaster"
+description = "Tools to help Loremasters running The One Ring 2E"
+authors.workspace = true
+categories.workspace = true
+edition.workspace = true
+keywords.workspace = true
+license.workspace = true
+version.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow.workspace = true
+characters.workspace = true
+cultures.workspace = true
+rand.workspace = true
+rand_pcg.workspace = true
+rand-utils.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+spin-sdk.workspace = true
+strum.workspace = true
+
+[lints]
+workspace = true
 
 [profile.release]
 codegen-units = 1

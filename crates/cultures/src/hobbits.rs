@@ -142,8 +142,6 @@ impl Name for HobbitOfTheShireName {}
 mod test {
     use rand::Rng;
 
-    use crate::rand_utils;
-
     use super::*;
 
     #[test]

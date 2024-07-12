@@ -1,0 +1,19 @@
+[package]
+name = "characters"
+authors.workspace = true
+categories.workspace = true
+edition.workspace = true
+keywords.workspace = true
+license.workspace = true
+version.workspace = true
+
+[dependencies]
+cultures.workspace = true
+rand.workspace = true
+serde.workspace = true
+
+[dev-dependencies]
+rand-utils.workspace = true
+
+[lints]
+workspace = true
