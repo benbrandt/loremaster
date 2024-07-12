@@ -87,7 +87,7 @@ mod test {
     #[test]
     fn name_can_be_displayed() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<ManOfBreeName>();
+        let name = rng.r#gen::<ManOfBreeName>();
 
         assert_eq!(
             format!("{name}"),
@@ -98,7 +98,7 @@ mod test {
     #[test]
     fn name_can_be_randomly_generated() {
         let mut rng = rand_utils::rng_from_entropy();
-        let name = rng.gen::<ManOfBreeName>();
+        let name = rng.r#gen::<ManOfBreeName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES]
             .concat()

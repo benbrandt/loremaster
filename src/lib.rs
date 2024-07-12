@@ -42,7 +42,7 @@ mod api {
     // POST /characters
     pub fn characters(_req: Request, _params: Params) -> anyhow::Result<Response> {
         let mut rng = rand_utils::rng_from_entropy();
-        let character = rng.gen::<Character>();
+        let character = rng.r#gen::<Character>();
 
         Ok(Response::builder()
             .status(200)

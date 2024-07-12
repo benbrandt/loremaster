@@ -31,7 +31,7 @@ impl Character {
 
 impl Distribution<Character> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Character {
-        let heroic_culture = rng.gen::<HeroicCulture>();
+        let heroic_culture = rng.r#gen::<HeroicCulture>();
         Character::new(rng, heroic_culture)
     }
 }
@@ -45,7 +45,7 @@ mod test {
     #[test]
     fn character_generated_with_name() {
         let mut rng = rand_utils::rng_from_entropy();
-        let character = rng.gen::<Character>();
+        let character = rng.r#gen::<Character>();
 
         assert!(!character.name.is_empty());
     }

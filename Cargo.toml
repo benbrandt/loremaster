@@ -1,12 +1,12 @@
 [package]
 name = "loremaster"
-authors = ["Ben Brandt <benjamin.j.brandt@gmail.com>"]
 description = "Tools to help Loremasters running The One Ring 2E"
-version = "0.1.0"
-edition = "2021"
-license = "MIT"
-keywords = ["tor", "rpg", "random", "generators"]
-categories = ["games"]
+authors.workspace = true
+categories.workspace = true
+edition.workspace = true
+keywords.workspace = true
+license.workspace = true
+version.workspace = true
 
 [lib]
 crate-type = ["cdylib"]
@@ -21,19 +21,37 @@ serde_json = "1.0.120"
 spin-sdk = "3.0.1"
 strum = { version = "0.26.3", features = ["derive"] }
 
-[lints.rust]
-future_incompatible = { level = "warn", priority = -1 }
-missing_debug_implementations = "warn"
-missing_docs = "warn"
-nonstandard_style = { level = "warn", priority = -1 }
-rust_2018_compatibility = { level = "warn", priority = -1 }
-rust_2018_idioms = { level = "warn", priority = -1 }
-rust_2021_compatibility = { level = "warn", priority = -1 }
-rust_2024_compatibility = { level = "warn", priority = -1 }
-unused = { level = "warn", priority = -1 }
-
-[lints.clippy]
-# cargo = "warn"
-pedantic = "warn"
+[lints]
+workspace = true
 
 [workspace]
+resolver = "2"
+
+[workspace.package]
+authors = ["Ben Brandt <benjamin.j.brandt@gmail.com>"]
+categories = ["games"]
+edition = "2021"
+keywords = ["tor", "rpg", "random", "generators"]
+license = "MIT"
+version = "0.1.0"
+
+[workspace.lints.rust]
+future-incompatible = "warn"
+keyword-idents = "warn"
+let-underscore = "warn"
+nonstandard-style = "warn"
+refining-impl-trait = "warn"
+rust-2018-idioms = "warn"
+rust-2024-compatibility = "warn"
+unused = "warn"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+module-name-repetitions = "allow"
+
+[profile.release]
+codegen-units = 1
+opt-level = "s"
+debug = false
+strip = true
+lto = true

@@ -81,12 +81,12 @@ impl HeroicCulture {
     /// ```
     pub fn gen_name<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
         match self {
-            HeroicCulture::Bardings => rng.gen::<BardingName>().to_string(),
-            HeroicCulture::DwarvesOfDurinsFolk => rng.gen::<DwarfOfDurinsFolkName>().to_string(),
-            HeroicCulture::ElvesOfLindon => rng.gen::<ElfOfLindonName>().to_string(),
-            HeroicCulture::HobbitsOfTheShire => rng.gen::<HobbitOfTheShireName>().to_string(),
-            HeroicCulture::MenOfBree => rng.gen::<ManOfBreeName>().to_string(),
-            HeroicCulture::RangersOfTheNorth => rng.gen::<RangerOfTheNorthName>().to_string(),
+            HeroicCulture::Bardings => rng.r#gen::<BardingName>().to_string(),
+            HeroicCulture::DwarvesOfDurinsFolk => rng.r#gen::<DwarfOfDurinsFolkName>().to_string(),
+            HeroicCulture::ElvesOfLindon => rng.r#gen::<ElfOfLindonName>().to_string(),
+            HeroicCulture::HobbitsOfTheShire => rng.r#gen::<HobbitOfTheShireName>().to_string(),
+            HeroicCulture::MenOfBree => rng.r#gen::<ManOfBreeName>().to_string(),
+            HeroicCulture::RangersOfTheNorth => rng.r#gen::<RangerOfTheNorthName>().to_string(),
         }
     }
 }
