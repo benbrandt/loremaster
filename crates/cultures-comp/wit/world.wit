@@ -43,9 +43,9 @@ interface types {
 interface generate {
     use types.{heroic-culture};
     /// Generate a random Heroic Culture.
-    culture: func() -> heroic-culture;
+    generate-culture: func() -> heroic-culture;
     /// Generate a random name for a given Heroic Culture.
-    name: func(culture: heroic-culture) -> string;
+    generate-name: func(culture: heroic-culture) -> string;
 }
 
 world cultures {

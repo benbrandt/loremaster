@@ -28,11 +28,11 @@ mod rangers;
 struct Component;
 
 impl Guest for Component {
-    fn culture() -> HeroicCulture {
+    fn generate_culture() -> HeroicCulture {
         rand_utils::rng_from_entropy().r#gen::<HeroicCulture>()
     }
 
-    fn name(culture: HeroicCulture) -> String {
+    fn generate_name(culture: HeroicCulture) -> String {
         culture.generate_name(&mut rand_utils::rng_from_entropy())
     }
 }
@@ -71,8 +71,8 @@ mod test {
 
     #[test]
     fn binding() {
-        let culture = Component::culture();
-        Component::name(culture);
+        let culture = Component::generate_culture();
+        Component::generate_name(culture);
     }
 
     #[test]
