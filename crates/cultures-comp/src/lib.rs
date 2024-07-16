@@ -1,7 +1,9 @@
 #![allow(unsafe_op_in_unsafe_fn)]
 
 use bardings::BardingName;
-use bindings::{Guest, HeroicCulture};
+use bindings::{
+    exports::loremaster::cultures::generate::Guest, loremaster::cultures::types::HeroicCulture,
+};
 use bree::ManOfBreeName;
 use dwarves::DwarfOfDurinsFolkName;
 use elves::ElfOfLindonName;
@@ -26,11 +28,11 @@ mod rangers;
 struct Component;
 
 impl Guest for Component {
-    fn generate_culture() -> HeroicCulture {
+    fn culture() -> HeroicCulture {
         rand_utils::rng_from_entropy().r#gen::<HeroicCulture>()
     }
 
-    fn generate_name(culture: HeroicCulture) -> String {
+    fn name(culture: HeroicCulture) -> String {
         culture.generate_name(&mut rand_utils::rng_from_entropy())
     }
 }
@@ -69,8 +71,8 @@ mod test {
 
     #[test]
     fn binding() {
-        let culture = Component::generate_culture();
-        Component::generate_name(culture);
+        let culture = Component::culture();
+        Component::name(culture);
     }
 
     #[test]
