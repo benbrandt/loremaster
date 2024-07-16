@@ -1,5 +1,5 @@
 [package]
-name = "cultures-comp"
+name = "characters-comp"
 authors.workspace = true
 categories.workspace = true
 edition.workspace = true
@@ -8,10 +8,7 @@ license.workspace = true
 version.workspace = true
 
 [dependencies]
-rand.workspace = true
-rand-utils.workspace = true
-strum.workspace = true
-wit-bindgen-rt.workspace = true
+wit-bindgen-rt = { workspace = true, features = ["bitflags"] }
 
 [lints]
 workspace = true
@@ -20,4 +17,7 @@ workspace = true
 crate-type = ["cdylib"]
 
 [package.metadata.component]
-package = "loremaster:cultures"
+package = "loremaster:characters"
+
+[package.metadata.component.target.dependencies]
+"loremaster:cultures" = { path = "../cultures-comp/wit" }

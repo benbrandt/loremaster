@@ -54,6 +54,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "characters-comp"
+version = "0.1.0"
+dependencies = [
+ "wit-bindgen-rt",
+]
+
+[[package]]
 name = "cultures"
 version = "0.1.0"
 dependencies = [

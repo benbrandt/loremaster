@@ -1,0 +1,23 @@
+package loremaster:characters;
+
+interface types {
+    use loremaster:cultures/types.{heroic-culture};
+    /// Contains the information necessary to fill out a character sheet.
+    record character {
+        /// The culture of the character.
+        heroic-culture: heroic-culture,
+        /// The character's name.
+        name: string,
+    }
+}
+
+interface generate {
+    use types.{character};
+    /// Generate a random character sheet.
+    generate-character: func() -> character;
+}
+
+world characters {
+    import loremaster:cultures/generate;
+    export generate;
+}
