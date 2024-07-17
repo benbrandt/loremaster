@@ -13,7 +13,7 @@ pub mod loremaster {
                 super::super::super::__link_custom_section_describing_imports;
             /// Available Heroic Cultures for Player Characters.
             #[repr(u8)]
-            #[derive(Clone, Copy, Eq, PartialEq, strum::EnumIter)]
+            #[derive(Clone, Copy, Eq, PartialEq)]
             pub enum HeroicCulture {
                 /// All Bardings speak Dalish, a language that can be described as a very old form of the
                 /// Common Speech. As far as their names are concerned, they are usually composed of one or two
