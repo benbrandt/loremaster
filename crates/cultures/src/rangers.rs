@@ -1,12 +1,10 @@
-use core::fmt;
+use std::fmt;
 
 use rand::{
     distributions::{Distribution, Standard},
     seq::SliceRandom,
     Rng,
 };
-
-use super::Name;
 
 #[derive(Debug)]
 pub struct RangerOfTheNorthName {
@@ -87,8 +85,6 @@ impl Distribution<RangerOfTheNorthName> for Standard {
         }
     }
 }
-
-impl Name for RangerOfTheNorthName {}
 
 #[cfg(test)]
 mod test {

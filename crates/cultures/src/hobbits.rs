@@ -1,12 +1,10 @@
-use core::fmt;
+use std::fmt;
 
 use rand::{
     distributions::{Distribution, Standard},
     seq::SliceRandom,
     Rng,
 };
-
-use super::Name;
 
 #[derive(Debug)]
 pub struct HobbitOfTheShireName {
@@ -135,8 +133,6 @@ impl Distribution<HobbitOfTheShireName> for Standard {
         }
     }
 }
-
-impl Name for HobbitOfTheShireName {}
 
 #[cfg(test)]
 mod test {

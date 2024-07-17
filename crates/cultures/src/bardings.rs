@@ -1,12 +1,10 @@
-use core::fmt;
+use std::fmt;
 
 use rand::{
     distributions::{Distribution, Standard},
     seq::SliceRandom,
     Rng,
 };
-
-use super::Name;
 
 #[derive(Debug)]
 pub struct BardingName {
@@ -45,8 +43,6 @@ impl Distribution<BardingName> for Standard {
         }
     }
 }
-
-impl Name for BardingName {}
 
 #[cfg(test)]
 mod test {

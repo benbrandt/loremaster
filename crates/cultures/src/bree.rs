@@ -1,12 +1,10 @@
-use core::fmt;
+use std::fmt;
 
 use rand::{
     distributions::{Distribution, Standard},
     seq::SliceRandom,
     Rng,
 };
-
-use super::Name;
 
 #[derive(Debug)]
 #[allow(clippy::module_name_repetitions)]
@@ -73,8 +71,6 @@ impl Distribution<ManOfBreeName> for Standard {
         }
     }
 }
-
-impl Name for ManOfBreeName {}
 
 #[cfg(test)]
 mod test {

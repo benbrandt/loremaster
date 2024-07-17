@@ -1,49 +1,82 @@
-/*!
-# Character information
+#![allow(unsafe_op_in_unsafe_fn)]
 
-Contains the information necessary to fill out a character sheet.
-*/
-
-use cultures::HeroicCulture;
-use rand::{
-    distributions::{Distribution, Standard},
-    Rng,
+use bindings::{
+    exports::loremaster::characters::generate::Guest,
+    loremaster::{
+        characters::types::{Character, HeroicCulture},
+        cultures::generate::{generate_culture, generate_name},
+    },
 };
-use serde::Serialize;
 
-/// Contains the information necessary to fill out a character sheet.
-#[derive(Debug, Serialize)]
-pub struct Character {
-    heroic_culture: HeroicCulture,
-    name: String,
+#[allow(warnings)]
+mod bindings;
+
+trait Generator {
+    fn generate_culture() -> HeroicCulture;
+    fn generate_name(culture: HeroicCulture) -> String;
 }
 
 impl Character {
-    #[must_use]
-    pub fn new(heroic_culture: HeroicCulture, name: String) -> Self {
+    fn new(heroic_culture: HeroicCulture, name: String) -> Self {
         Self {
             heroic_culture,
             name,
         }
     }
-}
 
-impl Distribution<Character> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Character {
-        let heroic_culture = rng.r#gen::<HeroicCulture>();
-        Character::new(heroic_culture, heroic_culture.gen_name(rng))
+    fn generate<G>() -> Self
+    where
+        G: Generator,
+    {
+        let heroic_culture = G::generate_culture();
+        let name = G::generate_name(heroic_culture);
+        Self::new(heroic_culture, name)
     }
 }
+
+struct Component;
+
+impl Generator for Component {
+    fn generate_culture() -> HeroicCulture {
+        generate_culture()
+    }
+
+    fn generate_name(culture: HeroicCulture) -> String {
+        generate_name(culture)
+    }
+}
+
+impl Guest for Component {
+    fn generate_character() -> Character {
+        Character::generate::<Self>()
+    }
+}
+
+bindings::export!(Component with_types_in bindings);
 
 #[cfg(test)]
 mod test {
     use super::*;
 
+    struct MockGenerator;
+
+    impl Generator for MockGenerator {
+        fn generate_culture() -> HeroicCulture {
+            HeroicCulture::Bardings
+        }
+
+        fn generate_name(_: HeroicCulture) -> String {
+            "Bard".to_string()
+        }
+    }
+
     #[test]
     fn character_generated_with_name() {
-        let mut rng = rand_utils::rng_from_entropy();
-        let character = rng.r#gen::<Character>();
-
-        assert!(!character.name.is_empty());
+        let character = Character::generate::<MockGenerator>();
+        assert_eq!(character.heroic_culture, MockGenerator::generate_culture());
+        assert_eq!(
+            character.name,
+            MockGenerator::generate_name(character.heroic_culture)
+        );
     }
 }

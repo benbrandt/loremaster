@@ -25,10 +25,31 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
+          targets: wasm32-wasip1
       - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-component
       - run: cargo fmt -- --check
-      - run: cargo clippy --workspace --all-features --all-targets
+      - run: cargo component clippy --workspace --all-features --all-targets
       - run: cargo test --workspace --all-features
+
+  build:
+    name: Build component
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+          targets: wasm32-wasip1
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-component, wac-cli
+      - run: cargo component build --workspace --all-features
+      - run: ./build.sh
 
   coverage:
     runs-on: ubuntu-latest
@@ -57,8 +78,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: stable
-          targets: wasm32-wasi
+          targets: wasm32-wasip1
       - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-component, wac-cli
       - uses: fermyon/actions/spin/setup@v1
       - uses: fermyon/actions/spin/deploy@v1
         with:

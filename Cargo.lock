@@ -47,32 +47,11 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 name = "characters"
 version = "0.1.0"
 dependencies = [
- "cultures",
- "rand",
- "rand-utils",
- "serde",
-]
-
-[[package]]
-name = "characters-comp"
-version = "0.1.0"
-dependencies = [
  "wit-bindgen-rt",
 ]
 
 [[package]]
 name = "cultures"
-version = "0.1.0"
-dependencies = [
- "rand",
- "rand-utils",
- "serde",
- "serde_json",
- "strum",
-]
-
-[[package]]
-name = "cultures-comp"
 version = "0.1.0"
 dependencies = [
  "rand",
@@ -280,15 +259,12 @@ name = "loremaster"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "characters",
- "cultures",
- "rand",
- "rand-utils",
- "rand_pcg",
+ "routefinder",
  "serde",
  "serde_json",
  "spin-sdk",
  "strum",
+ "wit-bindgen-rt",
 ]
 
 [[package]]
