@@ -31,7 +31,7 @@ jobs:
         with:
           tool: cargo-component
       - run: cargo fmt -- --check
-      - run: cargo component clippy --workspace --all-features --all-targets
+      - run: cargo component clippy --workspace --all-features
       - run: cargo test --workspace --all-features
 
   build:

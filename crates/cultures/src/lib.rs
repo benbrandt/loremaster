@@ -14,7 +14,6 @@ use rand::{
     Rng,
 };
 use rangers::RangerOfTheNorthName;
-use strum::IntoEnumIterator;
 
 mod bardings;
 #[allow(warnings)]
@@ -38,8 +37,13 @@ impl Guest for Component {
 }
 
 impl HeroicCulture {
+    /// Iterate through all possible cultures
+    fn iter() -> impl Iterator<Item = Self> {
+        CultureIterator::new()
+    }
+
     /// Generate a random name for a given Heroic Culture.
-    pub fn generate_name<R: Rng + ?Sized>(self, rng: &mut R) -> String {
+    fn generate_name<R: Rng + ?Sized>(self, rng: &mut R) -> String {
         match self {
             HeroicCulture::Bardings => rng.r#gen::<BardingName>().to_string(),
             HeroicCulture::DwarvesOfDurinsFolk => rng.r#gen::<DwarfOfDurinsFolkName>().to_string(),
@@ -57,11 +61,53 @@ impl Distribution<HeroicCulture> for Standard {
     }
 }
 
+struct CultureIterator(Option<HeroicCulture>);
+
+impl CultureIterator {
+    fn new() -> Self {
+        CultureIterator(None)
+    }
+}
+
+impl Iterator for CultureIterator {
+    type Item = HeroicCulture;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.0 = match self.0 {
+            None => Some(HeroicCulture::Bardings),
+            Some(HeroicCulture::Bardings) => Some(HeroicCulture::DwarvesOfDurinsFolk),
+            Some(HeroicCulture::DwarvesOfDurinsFolk) => Some(HeroicCulture::ElvesOfLindon),
+            Some(HeroicCulture::ElvesOfLindon) => Some(HeroicCulture::HobbitsOfTheShire),
+            Some(HeroicCulture::HobbitsOfTheShire) => Some(HeroicCulture::MenOfBree),
+            Some(HeroicCulture::MenOfBree) => Some(HeroicCulture::RangersOfTheNorth),
+            Some(HeroicCulture::RangersOfTheNorth) => None,
+        };
+        self.0
+    }
+}
+
 bindings::export!(Component with_types_in bindings);
 
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn iterate_cultures() {
+        let expected = &[
+            HeroicCulture::Bardings,
+            HeroicCulture::DwarvesOfDurinsFolk,
+            HeroicCulture::ElvesOfLindon,
+            HeroicCulture::HobbitsOfTheShire,
+            HeroicCulture::MenOfBree,
+            HeroicCulture::RangersOfTheNorth,
+        ];
+
+        assert_eq!(
+            HeroicCulture::iter().collect::<Vec<_>>().as_slice(),
+            expected
+        );
+    }
 
     #[test]
     fn random_culture() {

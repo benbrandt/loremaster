@@ -10,7 +10,6 @@ version.workspace = true
 [dependencies]
 rand.workspace = true
 rand-utils.workspace = true
-strum.workspace = true
 wit-bindgen-rt.workspace = true
 
 [lints]
