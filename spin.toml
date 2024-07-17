@@ -11,8 +11,8 @@ route = "/..."
 component = "loremaster"
 
 [component.loremaster]
-source = "target/wasm32-wasi/release/loremaster.wasm"
+source = "target/wasm32-wasip1/release/handler.wasm"
 allowed_outbound_hosts = []
 [component.loremaster.build]
-command = "cargo build --target wasm32-wasi --release"
+command = "./build.sh"
 watch = ["src/**/*.rs", "Cargo.toml"]

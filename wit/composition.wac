@@ -1,0 +1,22 @@
+package loremaster:composition;
+
+let cultures = new loremaster:cultures {
+    ...
+};
+
+let cultures-generate = cultures.generate;
+
+let characters = new loremaster:characters {
+    cultures-generate,
+    ...
+};
+
+let characters-generate = characters.generate;
+
+let handler = new loremaster:handler {
+    characters-generate,
+    cultures-generate,
+    ...
+};
+
+export handler...;
