@@ -1,85 +1,45 @@
-/*!
-# Heroic Cultures
-*/
-use core::fmt;
+#![allow(unsafe_op_in_unsafe_fn)]
 
+use bardings::BardingName;
+use bindings::{
+    exports::loremaster::cultures::generate::Guest, loremaster::cultures::types::HeroicCulture,
+};
+use bree::ManOfBreeName;
+use dwarves::DwarfOfDurinsFolkName;
+use elves::ElfOfLindonName;
+use hobbits::HobbitOfTheShireName;
 use rand::{
     distributions::{Distribution, Standard},
     seq::IteratorRandom,
     Rng,
 };
-use serde::Serialize;
-use strum::{EnumIter, EnumString, IntoEnumIterator};
-
-use self::{
-    bardings::BardingName, bree::ManOfBreeName, dwarves::DwarfOfDurinsFolkName,
-    elves::ElfOfLindonName, hobbits::HobbitOfTheShireName, rangers::RangerOfTheNorthName,
-};
+use rangers::RangerOfTheNorthName;
+use strum::IntoEnumIterator;
 
 mod bardings;
+#[allow(warnings)]
+mod bindings;
 mod bree;
 mod dwarves;
 mod elves;
 mod hobbits;
 mod rangers;
 
-/// Trait that ensures a given struct can randomly generate a name.
-pub trait Name: fmt::Display + Sized
-where
-    Standard: Distribution<Self>,
-{
-}
+struct Component;
 
-/// Generate a name for one of the following Heroic Cultures
-#[derive(Clone, Copy, Debug, strum::Display, EnumIter, EnumString, Eq, PartialEq, Serialize)]
-#[serde(rename_all = "kebab-case")]
-#[strum(serialize_all = "kebab-case")]
-pub enum HeroicCulture {
-    /// All Bardings speak Dalish, a language that can be described as a very old form of the
-    /// Common Speech. As far as their names are concerned, they are usually composed of one or two
-    /// elements (for example, Dag — Day, or Lif-stan — Life Stone). Like most Northmen, Bardings
-    /// often name their children after a renowned ancestor or relative, or choose a name beginning
-    /// with the same sound or sharing one element with that of the father (whose name is often
-    /// given with their first name when introduced formally — for example, Lifstan, son of
-    /// Leiknir, or Ingrith, daughter of Ingolf).
-    Bardings,
-    /// All Dwarves speak the Common Tongue, but preserve a knowledge of a secret Dwarvish
-    /// language. They receive a true name at birth that they do not reveal to members of other
-    /// folks, and adopt another name in the tradition of their neighbours. This custom has been in
-    /// use for so long that a number of names have become traditionally associated with Dwarves,
-    /// and are used almost exclusively by them. Dwarves of renown are sometimes given an honorific
-    /// title, celebrating an exceptional deed or distinctive quality (for example, Thorin
-    /// Oakenshield or Dáin Ironfoot).
-    DwarvesOfDurinsFolk,
-    /// In addition to the Common Speech, all Elves speak their own, fair tongue — the Sindarin
-    /// speech. For the most part, the Elves of Lindon bear names fashioned in that language.
-    ElvesOfLindon,
-    /// Hobbits speak only the Common Speech, preserving the use of a few words and names of their
-    /// own forgotten tongue. Names are composed of a first name and a family name. First names for
-    /// men are usually simple and short, with women being often given names of flowers or precious
-    /// stones, but among the older families a custom survives of giving more heroic and
-    /// high-sounding names, whose origin can be traced back to a time before the Shire.
-    HobbitsOfTheShire,
-    /// The Men of Bree have forgotten their ancient, native speech, and speak the Common Tongue,
-    /// albeit slightly altered in a local dialect. They use names that to foreign ears sound
-    /// similar to those used by Hobbits in the Shire (Hobbits beg to differ, of course).
-    MenOfBree,
-    /// The native language of the Dúnedain is the Westron, or Common Speech. Some still learn the
-    /// Sindarin Elven-tongue, as it is handed down from generation to generation. They retain an
-    /// ancient tradition of naming their children using that fair speech.
-    RangersOfTheNorth,
+impl Guest for Component {
+    fn generate_culture() -> HeroicCulture {
+        rand_utils::rng_from_entropy().r#gen::<HeroicCulture>()
+    }
+
+    fn generate_name(culture: HeroicCulture) -> String {
+        culture.generate_name(&mut rand_utils::rng_from_entropy())
+    }
 }
 
 impl HeroicCulture {
-    /// Generate a new name for the given race
-    ///
-    /// ```
-    /// use rand::Rng;
-    /// use cultures::HeroicCulture;
-    ///
-    /// let name = HeroicCulture::HobbitsOfTheShire.gen_name(&mut rand::thread_rng());
-    /// ```
-    pub fn gen_name<R: Rng + ?Sized>(&self, rng: &mut R) -> String {
+    /// Generate a random name for a given Heroic Culture.
+    pub fn generate_name<R: Rng + ?Sized>(self, rng: &mut R) -> String {
         match self {
             HeroicCulture::Bardings => rng.r#gen::<BardingName>().to_string(),
             HeroicCulture::DwarvesOfDurinsFolk => rng.r#gen::<DwarfOfDurinsFolkName>().to_string(),
@@ -97,36 +57,30 @@ impl Distribution<HeroicCulture> for Standard {
     }
 }
 
+bindings::export!(Component with_types_in bindings);
+
 #[cfg(test)]
 mod test {
-    use strum::{IntoEnumIterator, ParseError};
-
     use super::*;
+
+    #[test]
+    fn random_culture() {
+        let mut rng = rand_utils::rng_from_entropy();
+        rng.r#gen::<HeroicCulture>();
+    }
+
+    #[test]
+    fn binding() {
+        let culture = Component::generate_culture();
+        Component::generate_name(culture);
+    }
 
     #[test]
     fn no_generated_names_are_empty() {
         let mut rng = rand_utils::rng_from_entropy();
         for culture in HeroicCulture::iter() {
-            let name = culture.gen_name(&mut rng);
+            let name = culture.generate_name(&mut rng);
             assert!(!name.to_string().is_empty());
         }
-    }
-
-    #[test]
-    fn can_parse_from_strings() {
-        for culture in HeroicCulture::iter() {
-            assert_eq!(
-                Ok(culture),
-                HeroicCulture::try_from(culture.to_string().as_str())
-            );
-        }
-    }
-
-    #[test]
-    fn returns_error_for_unknown_string() {
-        assert_eq!(
-            Err(ParseError::VariantNotFound),
-            HeroicCulture::try_from("foo")
-        );
     }
 }
