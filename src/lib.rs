@@ -40,6 +40,10 @@ impl Generator for Component {
 /// A simple Spin HTTP component.
 #[http_component]
 fn handle_loremaster(req: Request) -> Response {
+    handler::<Component>(req)
+}
+
+fn handler<G: Generator + 'static>(req: Request) -> Response {
     if let Some(header) = req.header("spin-full-url") {
         println!(
             "Handling request to {}",
@@ -48,8 +52,8 @@ fn handle_loremaster(req: Request) -> Response {
     }
 
     let router = http_router! {
-        POST "/characters" => api::characters::<Component>,
-        POST "/cultures/:culture/names" => api::names::<Component>,
+        POST "/characters" => api::characters::<G>,
+        POST "/cultures/:culture/names" => api::names::<G>,
         _   "/*"             => |_req: Request, params| {
             let capture = params.wildcard().unwrap_or_default();
             Response::new(200, capture.to_string())
@@ -103,7 +107,7 @@ mod api {
     }
 
     #[derive(Serialize)]
-    #[serde(remote = "HeroicCulture")]
+    #[serde(remote = "HeroicCulture", rename_all = "kebab-case")]
     enum HeroicCultureRef {
         Bardings,
         DwarvesOfDurinsFolk,
@@ -125,10 +129,7 @@ mod api {
     struct CharacterJson(#[serde(with = "CharacterRef")] Character);
 
     // POST /characters
-    pub fn characters<G>(_req: Request, _params: Params) -> anyhow::Result<Response>
-    where
-        G: Generator,
-    {
+    pub fn characters<G: Generator>(_req: Request, _params: Params) -> anyhow::Result<Response> {
         let character = G::generate_character();
 
         Ok(Response::builder()
@@ -139,10 +140,7 @@ mod api {
     }
 
     // POST /cultures/:culture/names
-    pub fn names<G>(_req: Request, params: Params) -> anyhow::Result<Response>
-    where
-        G: Generator,
-    {
+    pub fn names<G: Generator>(_req: Request, params: Params) -> anyhow::Result<Response> {
         let culture = params
             .get("culture")
             .expect("CULTURE param missing")
@@ -163,26 +161,12 @@ mod api {
         use serde_json::Value;
         use spin_sdk::http::Method;
 
-        use crate::bindings::loremaster::{
-            characters::types::Character, cultures::types::HeroicCulture,
+        use crate::{
+            bindings::loremaster::cultures::types::HeroicCulture,
+            test::{CultureIterator, MockGenerator},
         };
 
         use super::*;
-
-        struct MockGenerator;
-
-        impl Generator for MockGenerator {
-            fn generate_character() -> Character {
-                Character {
-                    heroic_culture: HeroicCulture::Bardings,
-                    name: "Bard".to_string(),
-                }
-            }
-
-            fn generate_name(_culture: HeroicCulture) -> String {
-                "Bard".to_string()
-            }
-        }
 
         #[test]
         fn returns_a_character() {
@@ -195,31 +179,6 @@ mod api {
 
             assert!(!body["heroic_culture"].as_str().unwrap().is_empty());
             assert!(!body["name"].as_str().unwrap().is_empty());
-        }
-
-        struct CultureIterator(Option<HeroicCulture>);
-
-        impl CultureIterator {
-            fn new() -> Self {
-                CultureIterator(None)
-            }
-        }
-
-        impl Iterator for CultureIterator {
-            type Item = HeroicCulture;
-
-            fn next(&mut self) -> Option<Self::Item> {
-                self.0 = match self.0 {
-                    None => Some(HeroicCulture::Bardings),
-                    Some(HeroicCulture::Bardings) => Some(HeroicCulture::DwarvesOfDurinsFolk),
-                    Some(HeroicCulture::DwarvesOfDurinsFolk) => Some(HeroicCulture::ElvesOfLindon),
-                    Some(HeroicCulture::ElvesOfLindon) => Some(HeroicCulture::HobbitsOfTheShire),
-                    Some(HeroicCulture::HobbitsOfTheShire) => Some(HeroicCulture::MenOfBree),
-                    Some(HeroicCulture::MenOfBree) => Some(HeroicCulture::RangersOfTheNorth),
-                    Some(HeroicCulture::RangersOfTheNorth) => None,
-                };
-                self.0
-            }
         }
 
         #[test]
@@ -248,31 +207,72 @@ mod api {
     }
 }
 
-// #[cfg(test)]
-// mod test {
-//     use serde_json::Value;
-//     use spin_sdk::http::Method;
-//     use strum::IntoEnumIterator;
+#[cfg(test)]
+pub mod test {
+    use serde_json::Value;
+    use spin_sdk::http::Method;
 
-//     use super::*;
+    use super::*;
 
-//     #[test]
-//     fn returns_a_character() {
-//         let response = handle_loremaster(Request::new(Method::Post, "/characters"));
-//         let body = serde_json::from_slice::<Value>(response.body()).unwrap();
+    pub struct MockGenerator;
 
-//         assert!(!body["heroic_culture"].as_str().unwrap().is_empty());
-//         assert!(!body["name"].as_str().unwrap().is_empty());
-//     }
+    impl Generator for MockGenerator {
+        fn generate_character() -> Character {
+            Character {
+                heroic_culture: HeroicCulture::Bardings,
+                name: "Bard".to_string(),
+            }
+        }
 
-//     #[test]
-//     fn returns_a_name() {
-//         for culture in HeroicCulture::iter() {
-//             let response = handle_loremaster(Request::new(
-//                 Method::Post,
-//                 format!("/cultures/{culture}/names"),
-//             ));
-//             assert_eq!(response.status(), &200u16);
-//         }
-//     }
-// }
+        fn generate_name(_culture: HeroicCulture) -> String {
+            "Bard".to_string()
+        }
+    }
+
+    #[derive(Default)]
+    pub struct CultureIterator(Option<HeroicCulture>);
+
+    impl CultureIterator {
+        #[must_use]
+        pub fn new() -> Self {
+            Self::default()
+        }
+    }
+
+    impl Iterator for CultureIterator {
+        type Item = HeroicCulture;
+
+        fn next(&mut self) -> Option<Self::Item> {
+            self.0 = match self.0 {
+                None => Some(HeroicCulture::Bardings),
+                Some(HeroicCulture::Bardings) => Some(HeroicCulture::DwarvesOfDurinsFolk),
+                Some(HeroicCulture::DwarvesOfDurinsFolk) => Some(HeroicCulture::ElvesOfLindon),
+                Some(HeroicCulture::ElvesOfLindon) => Some(HeroicCulture::HobbitsOfTheShire),
+                Some(HeroicCulture::HobbitsOfTheShire) => Some(HeroicCulture::MenOfBree),
+                Some(HeroicCulture::MenOfBree) => Some(HeroicCulture::RangersOfTheNorth),
+                Some(HeroicCulture::RangersOfTheNorth) => None,
+            };
+            self.0
+        }
+    }
+
+    #[test]
+    fn returns_a_character() {
+        let response = handler::<MockGenerator>(Request::new(Method::Post, "/characters"));
+        let body = serde_json::from_slice::<Value>(response.body()).unwrap();
+
+        assert_eq!(body["heroic_culture"].as_str().unwrap(), "bardings");
+        assert_eq!(body["name"].as_str().unwrap(), "Bard");
+    }
+
+    #[test]
+    fn returns_a_name() {
+        for culture in CultureIterator::new() {
+            let response = handler::<MockGenerator>(Request::new(
+                Method::Post,
+                format!("/cultures/{culture}/names"),
+            ));
+            assert_eq!(response.status(), &200u16);
+        }
+    }
+}

@@ -61,11 +61,12 @@ impl Distribution<HeroicCulture> for Standard {
     }
 }
 
+#[derive(Default)]
 struct CultureIterator(Option<HeroicCulture>);
 
 impl CultureIterator {
     fn new() -> Self {
-        CultureIterator(None)
+        Self::default()
     }
 }
 
