@@ -24,9 +24,8 @@ pub fn router<G: Generator + 'static>(req: Request) -> Response {
     let router = http_router! {
         POST "/characters" => characters::<G>,
         POST "/cultures/:culture/names" => names::<G>,
-        _   "/*"             => |_req: Request, params| {
-            let capture = params.wildcard().unwrap_or_default();
-            Response::new(200, capture.to_string())
+        _   "/*"             => |_req: Request, _| {
+            Response::new(404, "")
         }
     };
     router.handle(req)
@@ -184,6 +183,16 @@ mod test {
             ));
             assert_eq!(response.status(), &200u16);
         }
+    }
+
+    #[test]
+    fn unknown_route() {
+        let request = Request::get("/unknown")
+            .header("spin-full-url", "http://localhost:8080/unknown")
+            .build();
+        let response = router::<MockGenerator>(request);
+
+        assert_eq!(response.status(), &404);
     }
 
     #[test]
