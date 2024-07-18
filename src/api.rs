@@ -5,12 +5,46 @@ use spin_sdk::{
     http::{conversions::TryIntoBody, Json, Params, Request, Response},
     http_router,
 };
+use utoipa::{OpenApi, ToSchema};
+use utoipa_scalar::Scalar;
 
 use crate::bindings::loremaster::characters::types::{Character, HeroicCulture};
 
 pub trait Generator {
     fn generate_character() -> Character;
     fn generate_name(culture: HeroicCulture) -> String;
+}
+
+#[derive(OpenApi)]
+#[openapi(
+    paths(openapi, characters, names),
+    components(schemas(CharacterRef, HeroicCultureRef))
+)]
+struct ApiDoc;
+
+// Return JSON version of an OpenAPI schema
+#[utoipa::path(
+    get,
+    path = "/api-docs/openapi.json",
+    responses(
+        (status = 200, description = "JSON file", body = ())
+    )
+)]
+fn openapi(_: Request, _: Params) -> anyhow::Result<Response> {
+    Ok(Response::builder()
+        .status(200)
+        .header("content-type", "application/json")
+        .body(Json(ApiDoc::openapi()).try_into_body()?)
+        .build())
+}
+
+fn scalar(_: Request, _: Params) -> Response {
+    let scalar = Scalar::new(ApiDoc::openapi());
+    Response::builder()
+        .status(200)
+        .header("content-type", "text/html")
+        .body(scalar.to_html())
+        .build()
 }
 
 pub fn router<G: Generator + 'static>(req: Request) -> Response {
@@ -24,6 +58,8 @@ pub fn router<G: Generator + 'static>(req: Request) -> Response {
     let router = http_router! {
         POST "/characters" => characters::<G>,
         POST "/cultures/:culture/names" => names::<G>,
+        GET  "/api-docs" => scalar,
+        GET  "/api-docs/openapi.json" => openapi,
         _   "/*"             => |_req: Request, _| {
             Response::new(404, "")
         }
@@ -32,6 +68,13 @@ pub fn router<G: Generator + 'static>(req: Request) -> Response {
 }
 
 // POST /characters
+#[utoipa::path(
+    post,
+    path = "/characters",
+    responses(
+        (status = 200, description = "Character", body = Character)
+    )
+)]
 fn characters<G: Generator>(_req: Request, _params: Params) -> anyhow::Result<Response> {
     let character = G::generate_character();
 
@@ -43,6 +86,16 @@ fn characters<G: Generator>(_req: Request, _params: Params) -> anyhow::Result<Re
 }
 
 // POST /cultures/:culture/names
+#[utoipa::path(
+    post,
+    path = "/cultures/{culture}/names",
+    responses(
+        (status = 200, description = "Name", body = String)
+    ),
+    params(
+        ("culture" = HeroicCulture, Path, description = "Heroic Culture to generate a name from"),
+    )
+)]
 fn names<G: Generator>(_req: Request, params: Params) -> anyhow::Result<Response> {
     let culture = params
         .get("culture")
@@ -91,7 +144,8 @@ impl FromStr for HeroicCulture {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, ToSchema)]
+#[schema(as = HeroicCulture)]
 #[serde(remote = "HeroicCulture", rename_all = "kebab-case")]
 enum HeroicCultureRef {
     Bardings,
@@ -102,7 +156,8 @@ enum HeroicCultureRef {
     RangersOfTheNorth,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, ToSchema)]
+#[schema(as = Character)]
 #[serde(remote = "Character")]
 struct CharacterRef {
     #[serde(with = "HeroicCultureRef")]
@@ -162,6 +217,16 @@ mod test {
                 Some(HeroicCulture::RangersOfTheNorth) => None,
             };
             self.0
+        }
+    }
+
+    #[test]
+    fn openapi_docs() {
+        for uri in ["/api-docs", "/api-docs/openapi.json"] {
+            let response = router::<MockGenerator>(Request::new(Method::Get, uri));
+            let body = response.body();
+            assert_eq!(response.status(), &200);
+            assert!(!body.is_empty());
         }
     }
 
