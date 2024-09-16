@@ -11,7 +11,7 @@ license = "MIT"
 version = "0.1.0"
 
 [workspace.dependencies]
-anyhow = "1.0.88"
+anyhow = "1.0.89"
 rand = "0.8.5"
 rand_pcg = "0.3.1"
 rand-utils = { path = "./crates/rand-utils" }
