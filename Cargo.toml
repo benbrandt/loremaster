@@ -54,7 +54,7 @@ serde.workspace = true
 serde_json.workspace = true
 spin-sdk.workspace = true
 utoipa = "4.2.3"
-utoipa-scalar = "0.1.0"
+utoipa-scalar = "0.2.0"
 wit-bindgen-rt.workspace = true
 
 [dev-dependencies]
