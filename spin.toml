@@ -14,5 +14,5 @@ component = "loremaster"
 source = "target/wasm32-wasip2/release/handler.wasm"
 allowed_outbound_hosts = []
 [component.loremaster.build]
-command = "./build.sh"
+command = "cargo build --target wasm32-wasip2 --release --workspace"
 watch = ["src/**/*.rs", "Cargo.toml"]

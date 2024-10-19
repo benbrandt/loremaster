@@ -5,37 +5,19 @@ A collection of tools to help a Loremaster running a campaign with The One Ring 
 */
 #![expect(clippy::needless_pass_by_value)]
 
-use api::{router, Generator};
-use bindings::loremaster::{
-    characters::{
-        generate::generate_character,
-        types::{Character, HeroicCulture},
-    },
-    cultures::generate::generate_name,
-};
+use api::router;
 use spin_sdk::{
     http::{Request, Response},
     http_component,
 };
 
 mod api;
-#[expect(warnings)]
-mod bindings;
-
-struct Component;
-
-impl Generator for Component {
-    fn generate_character() -> Character {
-        generate_character()
-    }
-
-    fn generate_name(culture: HeroicCulture) -> String {
-        generate_name(culture)
-    }
-}
+mod characters;
+mod cultures;
+mod rand;
 
 /// A simple Spin HTTP component.
 #[http_component]
 fn handle_loremaster(req: Request) -> Response {
-    router::<Component>(req)
+    router(req)
 }

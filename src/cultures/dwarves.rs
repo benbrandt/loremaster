@@ -47,11 +47,13 @@ impl Distribution<DwarfOfDurinsFolkName> for Standard {
 mod test {
     use rand::Rng;
 
+    use crate::rand::rng_from_entropy;
+
     use super::*;
 
     #[test]
     fn name_can_be_displayed() {
-        let mut rng = rand_utils::rng_from_entropy();
+        let mut rng = rng_from_entropy();
         let name = rng.r#gen::<DwarfOfDurinsFolkName>();
 
         assert_eq!(format!("{name}"), format!("{}", name.name));
@@ -59,7 +61,7 @@ mod test {
 
     #[test]
     fn name_can_be_randomly_generated() {
-        let mut rng = rand_utils::rng_from_entropy();
+        let mut rng = rng_from_entropy();
         let name = rng.r#gen::<DwarfOfDurinsFolkName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES].concat().contains(&name.name));

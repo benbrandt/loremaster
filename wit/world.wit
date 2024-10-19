@@ -1,7 +1,0 @@
-package loremaster:handler;
-
-world handler {
-    import loremaster:characters/generate;
-    import loremaster:cultures/generate;
-    // Export currently handled by spin
-}
