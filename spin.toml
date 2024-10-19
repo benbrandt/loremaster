@@ -11,7 +11,7 @@ route = "/..."
 component = "loremaster"
 
 [component.loremaster]
-source = "target/wasm32-wasip2/release/handler.wasm"
+source = "target/wasm32-wasip2/release/loremaster.wasm"
 allowed_outbound_hosts = []
 [component.loremaster.build]
 command = "cargo build --target wasm32-wasip2 --release --workspace"
