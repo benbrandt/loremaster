@@ -1,4 +1,4 @@
-#![allow(unsafe_op_in_unsafe_fn)]
+#![expect(unsafe_op_in_unsafe_fn, unsafe_attr_outside_unsafe)]
 
 use bindings::{
     exports::loremaster::characters::generate::Guest,
@@ -8,7 +8,7 @@ use bindings::{
     },
 };
 
-#[allow(warnings)]
+#[expect(warnings)]
 mod bindings;
 
 trait Generator {

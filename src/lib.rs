@@ -3,7 +3,7 @@
 
 A collection of tools to help a Loremaster running a campaign with The One Ring 2E.
 */
-#![allow(clippy::needless_pass_by_value)]
+#![expect(clippy::needless_pass_by_value)]
 
 use api::{router, Generator};
 use bindings::loremaster::{
@@ -19,7 +19,7 @@ use spin_sdk::{
 };
 
 mod api;
-#[allow(warnings)]
+#[expect(warnings)]
 mod bindings;
 
 struct Component;

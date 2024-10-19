@@ -1,4 +1,4 @@
-#![allow(unsafe_op_in_unsafe_fn)]
+#![expect(unsafe_op_in_unsafe_fn, unsafe_attr_outside_unsafe)]
 
 use bardings::BardingName;
 use bindings::{
@@ -16,7 +16,7 @@ use rand::{
 use rangers::RangerOfTheNorthName;
 
 mod bardings;
-#[allow(warnings)]
+#[expect(warnings)]
 mod bindings;
 mod bree;
 mod dwarves;

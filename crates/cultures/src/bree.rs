@@ -7,7 +7,6 @@ use rand::{
 };
 
 #[derive(Debug)]
-#[allow(clippy::module_name_repetitions)]
 pub struct ManOfBreeName {
     first_name: &'static str,
     family_name: &'static str,

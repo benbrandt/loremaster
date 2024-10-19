@@ -5,7 +5,7 @@ use spin_sdk::{
     http::{conversions::TryIntoBody, Json, Params, Request, Response},
     http_router,
 };
-use utoipa::{OpenApi, ToSchema};
+use utoipa::{OpenApi, PartialSchema, ToSchema};
 use utoipa_scalar::Scalar;
 
 use crate::bindings::loremaster::characters::types::{Character, HeroicCulture};
@@ -72,7 +72,7 @@ pub fn router<G: Generator + 'static>(req: Request) -> Response {
     post,
     path = "/characters",
     responses(
-        (status = 200, description = "Character", body = Character)
+        (status = 200, description = "Character", body = CharacterRef)
     )
 )]
 fn characters<G: Generator>(_req: Request, _params: Params) -> anyhow::Result<Response> {
@@ -93,7 +93,7 @@ fn characters<G: Generator>(_req: Request, _params: Params) -> anyhow::Result<Re
         (status = 200, description = "Name", body = String)
     ),
     params(
-        ("culture" = HeroicCulture, Path, description = "Heroic Culture to generate a name from"),
+        ("culture" = HeroicCultureRef, Path, description = "Heroic Culture to generate a name from"),
     )
 )]
 fn names<G: Generator>(_req: Request, params: Params) -> anyhow::Result<Response> {
@@ -161,6 +161,7 @@ enum HeroicCultureRef {
 #[serde(remote = "Character")]
 struct CharacterRef {
     #[serde(with = "HeroicCultureRef")]
+    #[schema(schema_with = HeroicCultureRef::schema)]
     heroic_culture: HeroicCulture,
     name: String,
 }
