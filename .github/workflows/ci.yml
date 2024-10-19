@@ -41,7 +41,7 @@ jobs:
           toolchain: stable
           targets: wasm32-wasip2
       - uses: Swatinem/rust-cache@v2
-      - run: cargo component build --workspace --target wasm32-wasip2
+      - run: cargo build --workspace --target wasm32-wasip2
 
   coverage:
     runs-on: ubuntu-latest
