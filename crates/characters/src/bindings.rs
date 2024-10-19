@@ -6,9 +6,11 @@ pub mod loremaster {
         pub mod types {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             use super::super::super::_rt;
-            pub type HeroicCulture = super::super::super::loremaster::cultures::types::HeroicCulture;
+            pub type HeroicCulture =
+                super::super::super::loremaster::cultures::types::HeroicCulture;
             /// Contains the information necessary to fill out a character sheet.
             #[derive(Clone)]
             pub struct Character {
@@ -18,10 +20,7 @@ pub mod loremaster {
                 pub name: _rt::String,
             }
             impl ::core::fmt::Debug for Character {
-                fn fmt(
-                    &self,
-                    f: &mut ::core::fmt::Formatter<'_>,
-                ) -> ::core::fmt::Result {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                     f.debug_struct("Character")
                         .field("heroic-culture", &self.heroic_culture)
                         .field("name", &self.name)
@@ -36,7 +35,8 @@ pub mod loremaster {
         pub mod types {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             /// Available Heroic Cultures for Player Characters.
             #[repr(u8)]
             #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
@@ -76,10 +76,7 @@ pub mod loremaster {
                 RangersOfTheNorth,
             }
             impl ::core::fmt::Debug for HeroicCulture {
-                fn fmt(
-                    &self,
-                    f: &mut ::core::fmt::Formatter<'_>,
-                ) -> ::core::fmt::Result {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                     match self {
                         HeroicCulture::Bardings => {
                             f.debug_tuple("HeroicCulture::Bardings").finish()
@@ -124,9 +121,11 @@ pub mod loremaster {
         pub mod generate {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             use super::super::super::_rt;
-            pub type HeroicCulture = super::super::super::loremaster::cultures::types::HeroicCulture;
+            pub type HeroicCulture =
+                super::super::super::loremaster::cultures::types::HeroicCulture;
             #[allow(unused_unsafe, clippy::all)]
             /// Generate a random Heroic Culture.
             pub fn generate_culture() -> HeroicCulture {
@@ -186,13 +185,16 @@ pub mod exports {
             pub mod generate {
                 #[used]
                 #[doc(hidden)]
-                static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
+                static __FORCE_SECTION_REF: fn() =
+                    super::super::super::super::__link_custom_section_describing_imports;
                 use super::super::super::super::_rt;
-                pub type Character = super::super::super::super::loremaster::characters::types::Character;
+                pub type Character =
+                    super::super::super::super::loremaster::characters::types::Character;
                 #[doc(hidden)]
                 #[allow(non_snake_case)]
                 pub unsafe fn _export_generate_character_cabi<T: Guest>() -> *mut u8 {
-                    #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
+                    #[cfg(target_arch = "wasm32")]
+                    _rt::run_ctors_once();
                     let result0 = T::generate_character();
                     let ptr1 = _RET_AREA.0.as_mut_ptr().cast::<u8>();
                     let super::super::super::super::loremaster::characters::types::Character {
@@ -237,9 +239,7 @@ pub mod exports {
                 pub(crate) use __export_loremaster_characters_generate_cabi;
                 #[repr(align(4))]
                 struct _RetArea([::core::mem::MaybeUninit<u8>; 12]);
-                static mut _RET_AREA: _RetArea = _RetArea(
-                    [::core::mem::MaybeUninit::uninit(); 12],
-                );
+                static mut _RET_AREA: _RetArea = _RetArea([::core::mem::MaybeUninit::uninit(); 12]);
             }
         }
     }

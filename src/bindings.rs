@@ -6,9 +6,11 @@ pub mod loremaster {
         pub mod types {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             use super::super::super::_rt;
-            pub type HeroicCulture = super::super::super::loremaster::cultures::types::HeroicCulture;
+            pub type HeroicCulture =
+                super::super::super::loremaster::cultures::types::HeroicCulture;
             /// Contains the information necessary to fill out a character sheet.
             #[derive(Clone)]
             pub struct Character {
@@ -18,10 +20,7 @@ pub mod loremaster {
                 pub name: _rt::String,
             }
             impl ::core::fmt::Debug for Character {
-                fn fmt(
-                    &self,
-                    f: &mut ::core::fmt::Formatter<'_>,
-                ) -> ::core::fmt::Result {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                     f.debug_struct("Character")
                         .field("heroic-culture", &self.heroic_culture)
                         .field("name", &self.name)
@@ -33,7 +32,8 @@ pub mod loremaster {
         pub mod generate {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             use super::super::super::_rt;
             pub type Character = super::super::super::loremaster::characters::types::Character;
             #[allow(unused_unsafe, clippy::all)]
@@ -61,9 +61,10 @@ pub mod loremaster {
                     let len4 = l3;
                     let bytes4 = _rt::Vec::from_raw_parts(l2.cast(), len4, len4);
                     super::super::super::loremaster::characters::types::Character {
-                        heroic_culture: super::super::super::loremaster::cultures::types::HeroicCulture::_lift(
-                            l1 as u8,
-                        ),
+                        heroic_culture:
+                            super::super::super::loremaster::cultures::types::HeroicCulture::_lift(
+                                l1 as u8,
+                            ),
                         name: _rt::string_lift(bytes4),
                     }
                 }
@@ -76,7 +77,8 @@ pub mod loremaster {
         pub mod types {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             /// Available Heroic Cultures for Player Characters.
             #[repr(u8)]
             #[derive(Clone, Copy, Eq, Ord, PartialEq, PartialOrd)]
@@ -116,10 +118,7 @@ pub mod loremaster {
                 RangersOfTheNorth,
             }
             impl ::core::fmt::Debug for HeroicCulture {
-                fn fmt(
-                    &self,
-                    f: &mut ::core::fmt::Formatter<'_>,
-                ) -> ::core::fmt::Result {
+                fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                     match self {
                         HeroicCulture::Bardings => {
                             f.debug_tuple("HeroicCulture::Bardings").finish()
@@ -164,9 +163,11 @@ pub mod loremaster {
         pub mod generate {
             #[used]
             #[doc(hidden)]
-            static __FORCE_SECTION_REF: fn() = super::super::super::__link_custom_section_describing_imports;
+            static __FORCE_SECTION_REF: fn() =
+                super::super::super::__link_custom_section_describing_imports;
             use super::super::super::_rt;
-            pub type HeroicCulture = super::super::super::loremaster::cultures::types::HeroicCulture;
+            pub type HeroicCulture =
+                super::super::super::loremaster::cultures::types::HeroicCulture;
             #[allow(unused_unsafe, clippy::all)]
             /// Generate a random Heroic Culture.
             pub fn generate_culture() -> HeroicCulture {
