@@ -20,7 +20,7 @@ serde_json = "1.0.135"
 spin-sdk = "3.1.0"
 strum = { version = "0.26.3", features = ["derive"] }
 utoipa = "5.3.1"
-utoipa-scalar = "0.2.1"
+utoipa-scalar = "0.3.0"
 
 [dev-dependencies]
 routefinder = "0.5.4"
