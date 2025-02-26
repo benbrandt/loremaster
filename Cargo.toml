@@ -12,13 +12,13 @@ version = "0.1.0"
 crate-type = ["cdylib"]
 
 [dependencies]
-anyhow = "1.0.95"
-rand = "0.8.5"
-rand_pcg = "0.3.1"
-serde = { version = "1.0.217", features = ["derive"] }
-serde_json = "1.0.137"
+anyhow = "1.0.96"
+rand = "0.9.0"
+rand_pcg = "0.9.0"
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
 spin-sdk = "3.1.0"
-strum = { version = "0.26.3", features = ["derive"] }
+strum = { version = "0.27.1", features = ["derive"] }
 utoipa = "5.3.1"
 utoipa-scalar = "0.3.0"
 
