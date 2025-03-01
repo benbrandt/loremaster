@@ -2,9 +2,9 @@
 # Heroic Cultures
 */
 use rand::{
+    Rng,
     distr::{Distribution, StandardUniform},
     seq::IteratorRandom,
-    Rng,
 };
 use serde::Serialize;
 use strum::{EnumIter, EnumString, IntoEnumIterator};
