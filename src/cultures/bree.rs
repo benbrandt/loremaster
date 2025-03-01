@@ -1,8 +1,8 @@
 use std::fmt;
 
 use rand::{
-    distributions::{Distribution, Standard},
-    seq::SliceRandom,
+    distr::{Distribution, StandardUniform},
+    seq::IndexedRandom,
     Rng,
 };
 
@@ -58,7 +58,7 @@ const FAMILY_NAMES: &[&str] = &[
     "Wayward",
 ];
 
-impl Distribution<ManOfBreeName> for Standard {
+impl Distribution<ManOfBreeName> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ManOfBreeName {
         ManOfBreeName {
             first_name: [MALE_NAMES, FEMALE_NAMES]
@@ -75,14 +75,14 @@ impl Distribution<ManOfBreeName> for Standard {
 mod test {
     use rand::Rng;
 
-    use crate::rand::rng_from_entropy;
+    use crate::rand::rng_from_os_rng;
 
     use super::*;
 
     #[test]
     fn name_can_be_displayed() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<ManOfBreeName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<ManOfBreeName>();
 
         assert_eq!(
             format!("{name}"),
@@ -92,8 +92,8 @@ mod test {
 
     #[test]
     fn name_can_be_randomly_generated() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<ManOfBreeName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<ManOfBreeName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES]
             .concat()

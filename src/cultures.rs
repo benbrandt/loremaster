@@ -2,7 +2,7 @@
 # Heroic Cultures
 */
 use rand::{
-    distributions::{Distribution, Standard},
+    distr::{Distribution, StandardUniform},
     seq::IteratorRandom,
     Rng,
 };
@@ -71,21 +71,21 @@ impl HeroicCulture {
     /// use rand::Rng;
     /// use cultures::HeroicCulture;
     ///
-    /// let name = HeroicCulture::HobbitsOfTheShire.gen_name(&mut rand::thread_rng());
+    /// let name = HeroicCulture::HobbitsOfTheShire.random_name(&mut rand::thread_rng());
     /// ```
-    pub fn generate_name<R: Rng + ?Sized>(self, rng: &mut R) -> String {
+    pub fn random_name<R: Rng + ?Sized>(self, rng: &mut R) -> String {
         match self {
-            HeroicCulture::Bardings => rng.r#gen::<BardingName>().to_string(),
-            HeroicCulture::DwarvesOfDurinsFolk => rng.r#gen::<DwarfOfDurinsFolkName>().to_string(),
-            HeroicCulture::ElvesOfLindon => rng.r#gen::<ElfOfLindonName>().to_string(),
-            HeroicCulture::HobbitsOfTheShire => rng.r#gen::<HobbitOfTheShireName>().to_string(),
-            HeroicCulture::MenOfBree => rng.r#gen::<ManOfBreeName>().to_string(),
-            HeroicCulture::RangersOfTheNorth => rng.r#gen::<RangerOfTheNorthName>().to_string(),
+            HeroicCulture::Bardings => rng.random::<BardingName>().to_string(),
+            HeroicCulture::DwarvesOfDurinsFolk => rng.random::<DwarfOfDurinsFolkName>().to_string(),
+            HeroicCulture::ElvesOfLindon => rng.random::<ElfOfLindonName>().to_string(),
+            HeroicCulture::HobbitsOfTheShire => rng.random::<HobbitOfTheShireName>().to_string(),
+            HeroicCulture::MenOfBree => rng.random::<ManOfBreeName>().to_string(),
+            HeroicCulture::RangersOfTheNorth => rng.random::<RangerOfTheNorthName>().to_string(),
         }
     }
 }
 
-impl Distribution<HeroicCulture> for Standard {
+impl Distribution<HeroicCulture> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> HeroicCulture {
         HeroicCulture::iter().choose(rng).unwrap()
     }
@@ -95,15 +95,15 @@ impl Distribution<HeroicCulture> for Standard {
 mod test {
     use strum::{IntoEnumIterator, ParseError};
 
-    use crate::rand::rng_from_entropy;
+    use crate::rand::rng_from_os_rng;
 
     use super::*;
 
     #[test]
     fn no_generated_names_are_empty() {
-        let mut rng = rng_from_entropy();
+        let mut rng = rng_from_os_rng();
         for culture in HeroicCulture::iter() {
-            let name = culture.generate_name(&mut rng);
+            let name = culture.random_name(&mut rng);
             assert!(!name.to_string().is_empty());
         }
     }

@@ -11,10 +11,10 @@ use rand_pcg::Pcg64;
 /// ```
 /// use rand::Rng;
 ///
-/// let mut rng = rand_utils::rng_from_entropy();
-/// let x: u32 = rng.gen();
+/// let mut rng = rand_utils::rng_from_os_rng();
+/// let x: u32 = rng.random();
 /// ```
 #[must_use]
-pub fn rng_from_entropy() -> impl Rng {
-    Pcg64::from_entropy()
+pub fn rng_from_os_rng() -> impl Rng {
+    Pcg64::from_os_rng()
 }
