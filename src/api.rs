@@ -1,6 +1,6 @@
 use rand::Rng;
 use spin_sdk::{
-    http::{conversions::TryIntoBody, Json, Params, Request, Response},
+    http::{Json, Params, Request, Response, conversions::TryIntoBody},
     http_router,
 };
 use utoipa::OpenApi;

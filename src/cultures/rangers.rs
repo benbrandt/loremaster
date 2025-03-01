@@ -1,9 +1,9 @@
 use std::fmt;
 
 use rand::{
+    Rng,
     distr::{Distribution, StandardUniform},
     seq::IndexedRandom,
-    Rng,
 };
 
 #[derive(Debug)]

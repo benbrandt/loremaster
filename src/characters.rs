@@ -5,8 +5,8 @@ Contains the information necessary to fill out a character sheet.
 */
 
 use rand::{
-    distr::{Distribution, StandardUniform},
     Rng,
+    distr::{Distribution, StandardUniform},
 };
 use serde::Serialize;
 use utoipa::ToSchema;

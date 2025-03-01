@@ -1,9 +1,9 @@
 use std::fmt;
 
 use rand::{
+    Rng,
     distr::{Distribution, StandardUniform},
     seq::IndexedRandom,
-    Rng,
 };
 
 #[derive(Debug)]
@@ -95,9 +95,11 @@ mod test {
         let mut rng = rng_from_os_rng();
         let name = rng.random::<ManOfBreeName>();
 
-        assert!([MALE_NAMES, FEMALE_NAMES]
-            .concat()
-            .contains(&name.first_name));
+        assert!(
+            [MALE_NAMES, FEMALE_NAMES]
+                .concat()
+                .contains(&name.first_name)
+        );
         assert!(FAMILY_NAMES.contains(&name.family_name));
     }
 }
