@@ -1,8 +1,8 @@
 use std::fmt;
 
 use rand::{
-    distributions::{Distribution, Standard},
-    seq::SliceRandom,
+    distr::{Distribution, StandardUniform},
+    seq::IndexedRandom,
     Rng,
 };
 
@@ -74,7 +74,7 @@ const FEMALE_NAMES: &[&str] = &[
     "Tarandîs",
 ];
 
-impl Distribution<ElfOfLindonName> for Standard {
+impl Distribution<ElfOfLindonName> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> ElfOfLindonName {
         ElfOfLindonName {
             name: [MALE_NAMES, FEMALE_NAMES]
@@ -90,22 +90,22 @@ impl Distribution<ElfOfLindonName> for Standard {
 mod test {
     use rand::Rng;
 
-    use crate::rand::rng_from_entropy;
+    use crate::rand::rng_from_os_rng;
 
     use super::*;
 
     #[test]
     fn name_can_be_displayed() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<ElfOfLindonName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<ElfOfLindonName>();
 
         assert_eq!(format!("{name}"), format!("{}", name.name));
     }
 
     #[test]
     fn name_can_be_randomly_generated() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<ElfOfLindonName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<ElfOfLindonName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES].concat().contains(&name.name));
     }

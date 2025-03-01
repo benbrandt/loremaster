@@ -5,7 +5,7 @@ Contains the information necessary to fill out a character sheet.
 */
 
 use rand::{
-    distributions::{Distribution, Standard},
+    distr::{Distribution, StandardUniform},
     Rng,
 };
 use serde::Serialize;
@@ -30,23 +30,23 @@ impl Character {
     }
 }
 
-impl Distribution<Character> for Standard {
+impl Distribution<Character> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Character {
-        let heroic_culture = rng.r#gen::<HeroicCulture>();
-        Character::new(heroic_culture, heroic_culture.generate_name(rng))
+        let heroic_culture = rng.random::<HeroicCulture>();
+        Character::new(heroic_culture, heroic_culture.random_name(rng))
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::rand::rng_from_entropy;
+    use crate::rand::rng_from_os_rng;
 
     use super::*;
 
     #[test]
     fn character_generated_with_name() {
-        let mut rng = rng_from_entropy();
-        let character = rng.r#gen::<Character>();
+        let mut rng = rng_from_os_rng();
+        let character = rng.random::<Character>();
 
         assert!(!character.name.is_empty());
     }

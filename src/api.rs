@@ -6,7 +6,7 @@ use spin_sdk::{
 use utoipa::OpenApi;
 use utoipa_scalar::Scalar;
 
-use crate::{characters::Character, cultures::HeroicCulture, rand::rng_from_entropy};
+use crate::{characters::Character, cultures::HeroicCulture, rand::rng_from_os_rng};
 
 #[derive(OpenApi)]
 #[openapi(
@@ -69,7 +69,7 @@ pub fn router(req: Request) -> Response {
     )
 )]
 fn characters(_req: Request, _params: Params) -> anyhow::Result<Response> {
-    let character = rng_from_entropy().r#gen::<Character>();
+    let character = rng_from_os_rng().random::<Character>();
 
     Ok(Response::builder()
         .status(200)
@@ -95,7 +95,7 @@ fn names(_req: Request, params: Params) -> anyhow::Result<Response> {
         .expect("CULTURE param missing")
         .parse::<HeroicCulture>()?;
 
-    let name = culture.generate_name(&mut rng_from_entropy());
+    let name = culture.random_name(&mut rng_from_os_rng());
 
     Ok(Response::builder()
         .status(200)

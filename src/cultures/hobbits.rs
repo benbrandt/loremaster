@@ -1,8 +1,8 @@
 use std::fmt;
 
 use rand::{
-    distributions::{Distribution, Standard},
-    seq::SliceRandom,
+    distr::{Distribution, StandardUniform},
+    seq::IndexedRandom,
     Rng,
 };
 
@@ -121,7 +121,7 @@ const FAMILY_NAMES: &[&str] = &[
     "Whitfoot",
 ];
 
-impl Distribution<HobbitOfTheShireName> for Standard {
+impl Distribution<HobbitOfTheShireName> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> HobbitOfTheShireName {
         HobbitOfTheShireName {
             first_name: [MALE_NAMES, FEMALE_NAMES]
@@ -138,14 +138,14 @@ impl Distribution<HobbitOfTheShireName> for Standard {
 mod test {
     use rand::Rng;
 
-    use crate::rand::rng_from_entropy;
+    use crate::rand::rng_from_os_rng;
 
     use super::*;
 
     #[test]
     fn name_can_be_displayed() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<HobbitOfTheShireName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<HobbitOfTheShireName>();
 
         assert_eq!(
             format!("{name}"),
@@ -155,8 +155,8 @@ mod test {
 
     #[test]
     fn name_can_be_randomly_generated() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<HobbitOfTheShireName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<HobbitOfTheShireName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES]
             .concat()

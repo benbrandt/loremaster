@@ -1,8 +1,8 @@
 use std::fmt;
 
 use rand::{
-    distributions::{Distribution, Standard},
-    seq::SliceRandom,
+    distr::{Distribution, StandardUniform},
+    seq::IndexedRandom,
     Rng,
 };
 
@@ -32,7 +32,7 @@ const FEMALE_NAMES: &[&str] = &[
     "Walda",
 ];
 
-impl Distribution<BardingName> for Standard {
+impl Distribution<BardingName> for StandardUniform {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> BardingName {
         BardingName {
             name: [MALE_NAMES, FEMALE_NAMES]
@@ -48,22 +48,22 @@ impl Distribution<BardingName> for Standard {
 mod test {
     use rand::Rng;
 
-    use crate::rand::rng_from_entropy;
+    use crate::rand::rng_from_os_rng;
 
     use super::*;
 
     #[test]
     fn name_can_be_displayed() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<BardingName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<BardingName>();
 
         assert_eq!(format!("{name}"), format!("{}", name.name));
     }
 
     #[test]
     fn name_can_be_randomly_generated() {
-        let mut rng = rng_from_entropy();
-        let name = rng.r#gen::<BardingName>();
+        let mut rng = rng_from_os_rng();
+        let name = rng.random::<BardingName>();
 
         assert!([MALE_NAMES, FEMALE_NAMES].concat().contains(&name.name));
     }
